@@ -1,0 +1,339 @@
+/* 💚 4 ELEMENTS – EMPATHY THEME */
+
+
+/* Fonts */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #f2fff5, #fffaf5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #1f1f1f;
+}
+
+
+/* 🌿 Flash Messages */
+
+.flash-container {
+    position: fixed;
+    top: 20px;
+    width: 100%;
+    text-align: center;
+    z-index: 999;
+}
+
+.flash {
+    display: inline-block;
+    padding: 12px 25px;
+    border-radius: 8px;
+    margin: 6px;
+    font-size: 15px;
+    animation: fadeIn 0.3s ease;
+}
+
+.flash.success {
+    background: #c6f7d0;
+    color: #104d27;
+}
+
+.flash.error {
+    background: #ffd1cc;
+    color: #8b1a05;
+}
+
+.flash.info {
+    background: #d0f0ff;
+    color: #004d66;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* 🌿 Container */
+
+.container {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+    width: 900px;
+    max-width: 100%;
+    min-height: 550px;
+    transition: all 0.6s ease-in-out;
+}
+
+
+/* 🌿 Forms */
+
+.form-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+}
+
+.sign-in-container {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+.sign-up-container {
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+}
+
+.container.right-panel-active .sign-in-container {
+    transform: translateX(100%);
+}
+
+.container.right-panel-active .sign-up-container {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: show 0.6s;
+}
+
+@keyframes show {
+    0%,
+    49.99% {
+        opacity: 0;
+        z-index: 1;
+    }
+    50%,
+    100% {
+        opacity: 1;
+        z-index: 5;
+    }
+}
+
+form {
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 50px;
+    height: 100%;
+    justify-content: center;
+    text-align: center;
+}
+
+form h1 {
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #1f5c3f;
+}
+
+form input {
+    background-color: #f4f7f5;
+    border: 1px solid #d6e8dc;
+    padding: 12px 15px;
+    margin: 8px 0;
+    width: 100%;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+form input:focus {
+    outline: none;
+    border-color: #33cc73;
+    box-shadow: 0 0 6px rgba(51, 204, 115, 0.4);
+}
+
+
+/* 🌿 Buttons */
+
+button {
+    border-radius: 20px;
+    border: 1px solid #33cc73;
+    background-color: #33cc73;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 80ms ease-in, background 0.3s;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #2eab61;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+button.ghost {
+    background-color: transparent;
+    border-color: #fff;
+}
+
+
+/* 🌿 Social Icons */
+
+.social-container {
+    margin: 20px 0;
+}
+
+.social-container a {
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 40px;
+    margin: 0 5px;
+    color: #1f5c3f;
+    transition: 0.3s;
+}
+
+.social-container a:hover {
+    background-color: #33cc73;
+    color: #fff;
+}
+
+
+/* 🌿 Overlay */
+
+.overlay-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.6s ease-in-out;
+    z-index: 100;
+}
+
+.container.right-panel-active .overlay-container {
+    transform: translateX(-100%);
+}
+
+.overlay {
+    background: linear-gradient(to right, #33cc73, #2eab61);
+    color: #ffffff;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.container.right-panel-active .overlay {
+    transform: translateX(50%);
+}
+
+.overlay-panel {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 40px;
+    text-align: center;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.overlay-panel h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.overlay-panel p {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.overlay-right {
+    right: 0;
+    transform: translateX(0);
+}
+
+.overlay-left {
+    transform: translateX(-20%);
+}
+
+.container.right-panel-active .overlay-left {
+    transform: translateX(0);
+}
+
+.container.right-panel-active .overlay-right {
+    transform: translateX(20%);
+}
+
+
+/* 🌿 Small Pages (Forgot, Reset, Verify) */
+
+.container.small {
+    width: 450px;
+    min-height: 350px;
+    padding: 30px;
+    text-align: center;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.container.small h1,
+.container.small h2 {
+    margin-bottom: 15px;
+    color: #1f5c3f;
+}
+
+.container.small input {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #cfe7d5;
+    background: #f9fdf9;
+}
+
+.container.small button {
+    width: 100%;
+    background-color: #33cc73;
+    border: none;
+}
+
+.container.small a {
+    display: inline-block;
+    margin-top: 10px;
+    color: #33cc73;
+    text-decoration: none;
+}
+
+.container.small a:hover {
+    text-decoration: underline;
+}
