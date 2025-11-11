@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | 4 Elements</title>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <style>
+         :root {
+            --main-green: #33cc73;
+            --dark-green: #1f5c3f;
+            --light-bg: #f7f7f7;
+            --text-gray: #555;
+            --title-color: #1e1e1e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f9fff9, #e9f7ef);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .contact-container {
+            background: #fff;
+            width: 420px;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            animation: fadeIn 0.8s ease;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            color: var(--dark-green);
+            margin-bottom: 10px;
+        }
+        
+        p {
+            font-size: 0.95rem;
+            color: var(--text-gray);
+            margin-bottom: 25px;
+        }
+        
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        input,
+        textarea {
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 14px;
+            background: #f8f8f8;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--main-green);
+            box-shadow: 0 0 6px rgba(51, 204, 115, 0.4);
+            background: #fff;
+        }
+        
+        textarea {
+            height: 120px;
+            resize: none;
+        }
+        
+        button {
+            background: var(--main-green);
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            padding: 12px 0;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background: var(--dark-green);
+            transform: scale(1.05);
+        }
+        
+        a {
+            display: inline-block;
+            margin-top: 15px;
+            color: var(--main-green);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .icon {
+            font-size: 3rem;
+            color: var(--main-green);
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="contact-container">
+        <i class="fa-solid fa-envelope-circle-check icon"></i>
+        <h1>Contact Us</h1>
+        <p>We’d love to hear from you 💚 — send us your thoughts or feedback.</p>
+
+        <form method="POST" action="{{ url_for('contact') }}">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <textarea name="message" placeholder="Write your message..." required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+
+        <a href="{{ url_for('home') }}"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+    </div>
+</body>
+
+</html>

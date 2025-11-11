@@ -5,23 +5,23 @@ import sqlite3, random, hashlib
 app = Flask(__name__)
 app.secret_key = "super_secret_key_here"
 
-# -----------------------------
-# EMAIL CONFIGURATION
-# -----------------------------
+# ==============================================================
+# 📧 EMAIL CONFIGURATION (Gmail App Password Required)
+# ==============================================================
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = '4elements.fontys@gmail.com'
-app.config['MAIL_PASSWORD'] = 'fojk hqsu ocwj qyid'
+app.config['MAIL_PASSWORD'] = 'fojk hqsu ocwj qyid'  # App Password from Google
 app.config['MAIL_DEFAULT_SENDER'] = '4elements.fontys@gmail.com'
 
 mail = Mail(app)
 
-# -----------------------------
-# DATABASE SETUP
-# -----------------------------
+# ==============================================================
+# 🗂️ DATABASE SETUP
+# ==============================================================
 def init_db():
-    """Create database and users table if not exists."""
+    """Create database tables if they don’t exist."""
     conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
     cursor.execute('''CREATE TABLE IF NOT EXISTS users (
@@ -30,29 +30,35 @@ def init_db():
                         email TEXT UNIQUE NOT NULL,
                         password TEXT NOT NULL
                     )''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS messages (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        name TEXT NOT NULL,
+                        email TEXT NOT NULL,
+                        message TEXT NOT NULL
+                    )''')
     conn.commit()
     conn.close()
 
-# -----------------------------
-# PASSWORD SECURITY
-# -----------------------------
+# ==============================================================
+# 🔐 PASSWORD SECURITY
+# ==============================================================
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
 def verify_password(stored_password, given_password):
     return stored_password == hashlib.sha256(given_password.encode()).hexdigest()
 
-# -----------------------------
-# ROUTES
-# -----------------------------
+# ==============================================================
+# 🏠 HOME PAGE
+# ==============================================================
 @app.route('/')
 def home():
     user = session.get('user')
     return render_template('index.html', user=user)
 
-# -----------------------------
-# LOGIN & REGISTER
-# -----------------------------
+# ==============================================================
+# 👤 LOGIN & REGISTER
+# ==============================================================
 @app.route('/login_page')
 def login_page():
     return render_template('login.html')
@@ -73,7 +79,6 @@ def register():
         flash("⚠️ This email already exists.", "error")
     finally:
         conn.close()
-
     return redirect(url_for('login_page'))
 
 @app.route('/login', methods=['POST'])
@@ -109,13 +114,80 @@ def logout():
     flash("You’ve been logged out successfully.", "info")
     return redirect(url_for('home'))
 
-# -----------------------------
-# PASSWORD RESET FLOW (FIXED)
-# -----------------------------
+# ==============================================================
+# 💌 CONTACT PAGE
+# ==============================================================
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        message = request.form['message']
+
+        # Save message in database
+        conn = sqlite3.connect('database.db')
+        c = conn.cursor()
+        c.execute("INSERT INTO messages (name, email, message) VALUES (?, ?, ?)", (name, email, message))
+        conn.commit()
+        conn.close()
+
+        # Send email to admin + confirmation to user
+        try:
+            print(f"📨 New contact form submitted by {name} <{email}>")
+
+            # Message to admin
+            msg_admin = Message("New Contact Form Submission",
+                                recipients=['4elements.fontys@gmail.com'])
+            msg_admin.body = f"""
+            📬 New message from {name} ({email}):
+
+            "{message}"
+
+            — Smart Donation Website
+            """
+            mail.send(msg_admin)
+
+            # Confirmation email to user
+            msg_user = Message("Thanks for contacting 4 Elements 💚", recipients=[email])
+            msg_user.body = f"""
+            Hello {name},
+
+            Thank you for reaching out to 4 Elements 🌿
+            We’ve received your message and will get back to you soon.
+
+            Your message:
+            "{message}"
+
+            — 4 Elements Team
+            """
+            mail.send(msg_user)
+
+            flash("💚 Your message has been sent successfully!", "success")
+
+        except Exception as e:
+            print("❌ Mail error:", e)
+            flash(f"⚠️ Failed to send email: {e}", "error")
+
+        return redirect(url_for('home'))
+
+    return render_template('contact.html', user=session.get('user'))
+
+# ==============================================================
+# 🌱 ABOUT PAGE
+# ==============================================================
+@app.route('/about')
+def about():
+    user = session.get('user')
+    return render_template('about.html', user=user)
+
+# ==============================================================
+# 🔑 PASSWORD RESET FLOW
+# ==============================================================
 @app.route('/forgot', methods=['GET', 'POST'])
 def forgot():
     if request.method == 'POST':
         email = request.form['email']
+
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
         c.execute("SELECT * FROM users WHERE email=?", (email,))
@@ -148,10 +220,8 @@ def forgot():
             flash("⚠️ No account found with that email.", "error")
     return render_template('forgot.html')
 
-
 @app.route('/verify_otp', methods=['GET', 'POST'])
 def verify_otp():
-    # 🧩 منع الوصول المباشر إذا ما تم إرسال OTP
     if request.method == 'GET' and not session.get('otp'):
         flash("Please enter your email first.", "error")
         return redirect(url_for('forgot'))
@@ -167,10 +237,8 @@ def verify_otp():
             flash("❌ Invalid code. Try again.", "error")
     return render_template('verify.html')
 
-
 @app.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
-    # 🧩 لا يمكن الوصول إلا بعد التحقق من OTP
     if not session.get('otp_ok') or not session.get('reset_email'):
         flash("Please verify your code first.", "error")
         return redirect(url_for('forgot'))
@@ -186,7 +254,6 @@ def reset_password():
         conn.commit()
         conn.close()
 
-        # 🧹 تنظيف الجلسة بعد الانتهاء
         session.pop('otp_ok', None)
         session.pop('reset_email', None)
 
@@ -195,9 +262,9 @@ def reset_password():
 
     return render_template('reset.html')
 
-# -----------------------------
-# START APP
-# -----------------------------
+# ==============================================================
+# 🚀 START APP
+# ==============================================================
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)
