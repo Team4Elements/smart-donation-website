@@ -144,6 +144,132 @@
             font-size: 0.9rem;
             border-top: 1px solid #eee;
         }
+
+        /* ===== TIMELINE SECTION ===== */
+        .timeline-section {
+            padding: 100px 8%;
+            background: #fff;
+        }
+
+        .timeline-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .timeline-header h2 {
+            font-family: "Poppins", sans-serif;
+            font-size: 2.2rem;
+            color: var(--dark-green);
+            margin-bottom: 10px;
+        }
+
+        .timeline-header p {
+            color: #666;
+            font-size: 1.05rem;
+        }
+
+        /* Timeline vertical line */
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: var(--main-green);
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        /* Each timeline item */
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            padding: 30px 40px;
+            box-sizing: border-box;
+        }
+
+        .timeline-content {
+            background: #fff;
+            box-shadow: 0 4px 15px rgba(51, 204, 115, 0.25);
+            padding: 25px;
+            border-radius: 16px;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.7s ease-out;
+        }
+
+        .timeline-content.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Alternate left and right */
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            text-align: right;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            text-align: left;
+        }
+
+        /* Dots */
+        .timeline-item::after {
+            content: "";
+            position: absolute;
+            top: 40px;
+            right: -9px;
+            width: 18px;
+            height: 18px;
+            background: var(--main-green);
+            border-radius: 50%;
+        }
+
+        .timeline-item:nth-child(even)::after {
+            left: -9px;
+            right: auto;
+        }
+
+
+        /* Headings */
+        .timeline-content h3 {
+            color: var(--dark-green);
+            font-family: "Poppins", sans-serif;
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+        }
+
+        .timeline-content p {
+            color: #555;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* Responsive layout */
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 10px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                padding-left: 40px;
+                text-align: left;
+                left: 0 !important;
+            }
+
+
+            .timeline-item::after {
+                left: 0;
+            }
+        }
         /* ===== RESPONSIVE ===== */
         
         @media (max-width: 768px) {
@@ -198,9 +324,77 @@
         </div>
     </section>
 
+ 
+
+    <!-- ===== HOW IT STARTED TIMELINE ===== -->
+    <section class="timeline-section">
+        <div class="timeline-header fade-in">
+            <h2>How It Started</h2>
+            <p>Our journey from an idea to a movement for change.</p>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item fade-in">
+                <div class="timeline-content left">
+                    <h3>🌱 The Spark</h3>
+                    <p>It all began with a simple observation - every day, perfectly good food was being thrown away while many families struggled to afford a meal. Our team realized that the problem wasn’t a lack of food, but a lack of connection.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item fade-in">
+                <div class="timeline-content right">
+                    <h3>💡 The Idea</h3>
+                    <p>We asked ourselves: What if technology could bridge that gap?
+That question became the seed of our project - a smart, easy to use web platform that connects food donors directly with food banks in real time.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item fade-in">
+                <div class="timeline-content left">
+                    <h3>🧭 The Research</h3>
+                    <p>We analyzed existing solutions an realized, that while they addressed food waste globally, none offered a simple, local, non-profit system for direct food donations.
+This insight shaped our unique goal: build a community driven donation network.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item fade-in">
+                <div class="timeline-content right">
+                    <h3>🤝 The Collaboration</h3>
+                    <p>Our team ethusiastically worked on this project, combining our skills in design, coding and project management.
+Every step was guided by ethical research and community feedback to ensure transparency, privacy and fairness.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item fade-in">
+                <div class="timeline-content left">
+                    <h3>🌍 The Vision Ahead</h3>
+                    <p>What began as a university project has grown into a vision for real impact - reducing food waste, supporting sustainability, and empowering local communities.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <footer>
         © 2025 4 Elements — Together for Change
     </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const elements = document.querySelectorAll(".fade-in, .timeline-content");
+
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("visible");
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            elements.forEach(el => observer.observe(el));
+        });
+    </script>
+
 </body>
 
 </html>
