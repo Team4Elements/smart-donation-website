@@ -1,0 +1,222 @@
+<!-- ===========================
+      HUMANITARIAN CHARITY FOOTER
+     =========================== -->
+<style>
+     :root {
+        --bg: #f7f4ef;
+        --green: #3bb676;
+        --gold: #d9b66c;
+        --text: #4a4a4a;
+        --white: #ffffff;
+    }
+    
+    .footer {
+        background: var(--bg);
+        padding: 70px 7%;
+        border-top-left-radius: 80px;
+        border-top-right-radius: 80px;
+        margin-top: 70px;
+        position: relative;
+        overflow: hidden;
+        animation: fadeInFooter 1.4s ease;
+    }
+    /* soft floating waves */
+    
+    .footer::before {
+        content: "";
+        position: absolute;
+        top: -40px;
+        left: 0;
+        width: 100%;
+        height: 90px;
+        background: radial-gradient(circle, rgba(59, 182, 118, 0.18), transparent);
+        animation: softWave 6s infinite ease-in-out;
+    }
+    
+    @keyframes softWave {
+        0% {
+            transform: translateY(0);
+            opacity: 0.35;
+        }
+        50% {
+            transform: translateY(12px);
+            opacity: 0.6;
+        }
+        100% {
+            transform: translateY(0);
+            opacity: 0.35;
+        }
+    }
+    
+    @keyframes fadeInFooter {
+        0% {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    /* main grid */
+    
+    .footer-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+        gap: 45px;
+        color: var(--text);
+        position: relative;
+        z-index: 2;
+    }
+    /* branding */
+    
+    .footer-brand h2 {
+        font-family: 'Poppins', sans-serif;
+        font-size: 27px;
+        font-weight: 700;
+        color: var(--green);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .footer-brand p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+    
+    .footer-brand i {
+        font-size: 28px;
+        animation: softHand 3s infinite ease-in-out;
+    }
+    
+    @keyframes softHand {
+        0% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-6px);
+        }
+        100% {
+            transform: translateY(0);
+        }
+    }
+    /* links */
+    
+    .footer-links h3 {
+        font-family: 'Poppins', sans-serif;
+        color: var(--green);
+        margin-bottom: 15px;
+    }
+    
+    .footer-links a {
+        display: block;
+        text-decoration: none;
+        color: var(--text);
+        margin: 8px 0;
+        font-size: 0.95rem;
+        transition: 0.3s;
+    }
+    
+    .footer-links a:hover {
+        color: var(--green);
+        transform: translateX(5px);
+    }
+    /* contact */
+    
+    .footer-contact h3 {
+        font-family: 'Poppins', sans-serif;
+        color: var(--green);
+        margin-bottom: 12px;
+    }
+    
+    .footer-contact p {
+        margin: 6px 0;
+    }
+    /* social icons */
+    
+    .footer-social a {
+        font-size: 1.4rem;
+        margin-right: 15px;
+        color: var(--green);
+        transition: 0.3s ease;
+    }
+    
+    .footer-social a:hover {
+        color: var(--gold);
+        transform: scale(1.15);
+    }
+    /* donate button */
+    
+    .footer-btn {
+        margin-top: 18px;
+        display: inline-block;
+        padding: 11px 28px;
+        border-radius: 30px;
+        background: var(--green);
+        color: var(--white);
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.3s;
+        border: 2px solid var(--green);
+    }
+    
+    .footer-btn:hover {
+        background: var(--white);
+        color: var(--green);
+        transform: translateY(-4px);
+    }
+    /* bottom note */
+    
+    .footer-bottom {
+        text-align: center;
+        margin-top: 55px;
+        padding-top: 25px;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+        font-size: 0.85rem;
+    }
+</style>
+
+<footer class="footer">
+    <div class="footer-grid">
+
+        <!-- Brand -->
+        <div class="footer-brand">
+            <h2><i class="fa-solid fa-hand-holding-heart"></i>4 ELEMENTS</h2>
+            <p>
+                Spreading kindness, reducing waste, and empowering communities with every donation. Together, we make hope real. 🌱
+            </p>
+        </div>
+
+        <!-- Links -->
+        <div class="footer-links">
+            <h3>Explore</h3>
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+            <a href="/login_page">Login</a>
+        </div>
+
+        <!-- Contact -->
+        <div class="footer-contact">
+            <h3>Contact</h3>
+            <p><i class="fa-solid fa-envelope"></i> support@4elements.org</p>
+            <p><i class="fa-solid fa-phone"></i> +31 625 000 111</p>
+            <p><i class="fa-solid fa-location-dot"></i> Eindhoven, Netherlands</p>
+
+            <div class="footer-social">
+                <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+            </div>
+
+            <a href="/login_page" class="footer-btn">Join Us</a>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        © 2025 4 Elements — Building Kindness Together 🌍💚
+    </div>
+</footer>

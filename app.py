@@ -20,28 +20,39 @@ mail = Mail(app)
 # ==============================================================
 # 🗂️ DATABASE SETUP
 # ==============================================================
+
 def init_db():
     """Create database tables if they don’t exist."""
     conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
+
     cursor.execute('''CREATE TABLE IF NOT EXISTS users (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         name TEXT NOT NULL,
                         email TEXT UNIQUE NOT NULL,
                         password TEXT NOT NULL
                     )''')
+
     cursor.execute('''CREATE TABLE IF NOT EXISTS messages (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         name TEXT NOT NULL,
                         email TEXT NOT NULL,
                         message TEXT NOT NULL
                     )''')
+
+    # Feedback left by users (after delete or whenever)
+    cursor.execute('''CREATE TABLE IF NOT EXISTS feedback (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        feedback TEXT NOT NULL
+                    )''')
+
     conn.commit()
     conn.close()
 
 # ==============================================================
 # 🔐 PASSWORD SECURITY
 # ==============================================================
+
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
@@ -51,6 +62,7 @@ def verify_password(stored_password, given_password):
 # ==============================================================
 # 🏠 HOME PAGE
 # ==============================================================
+
 @app.route('/')
 def home():
     user = session.get('user')
@@ -59,6 +71,7 @@ def home():
 # ==============================================================
 # 👤 LOGIN & REGISTER
 # ==============================================================
+
 @app.route('/login_page')
 def login_page():
     return render_template('login.html')
@@ -72,7 +85,10 @@ def register():
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
     try:
-        c.execute("INSERT INTO users (name, email, password) VALUES (?, ?, ?)", (name, email, password))
+        c.execute(
+            "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+            (name, email, password)
+        )
         conn.commit()
         flash("✅ Account created successfully! You can now log in.", "success")
     except sqlite3.IntegrityError:
@@ -93,17 +109,41 @@ def login():
     conn.close()
 
     if user and verify_password(user[3], password):
+        # user = (id, name, email, password)
         session['user'] = user[1]
+        session['email'] = user[2]
         flash(f"Welcome back, {user[1]}!", "success")
         return redirect(url_for('account'))
     else:
         flash("❌ Invalid email or password.", "error")
         return redirect(url_for('login_page'))
 
+# ==============================================================
+# 👤 ACCOUNT + DASHBOARD
+# ==============================================================
+
 @app.route('/account')
 def account():
     if 'user' in session:
-        return render_template('account.html', name=session['user'])
+        # Dummy / example data for now – later you can replace with real DB data
+        dashboard_data = {
+            "food_donations": 12,
+            "money_donated": 247,
+            "volunteer_hours": 28,
+            "points": 1450,
+            "activity": [
+                ("Donated 2kg vegetables", "2 days ago"),
+                ("Volunteered 2 hours", "5 days ago"),
+                ("Donated €25", "1 week ago"),
+                ("Donated 5kg canned goods", "1 week ago"),
+                ("Volunteered 4 hours", "2 weeks ago"),
+            ]
+        }
+        return render_template(
+            'account.html',
+            name=session['user'],
+            **dashboard_data
+        )
     else:
         flash("Please log in first.", "error")
         return redirect(url_for('login_page'))
@@ -115,8 +155,57 @@ def logout():
     return redirect(url_for('home'))
 
 # ==============================================================
+# 🗑️ DELETE ACCOUNT + FEEDBACK FLOW
+# ==============================================================
+
+@app.route('/delete_account_page')
+def delete_account_page():
+    if 'user' not in session:
+        flash("Please log in first.", "error")
+        return redirect(url_for('login_page'))
+    return render_template('delete_account.html', name=session['user'])
+
+@app.route('/delete_account', methods=['POST'])
+def delete_account():
+    if 'user' not in session:
+        flash("Please log in first.", "error")
+        return redirect(url_for('login_page'))
+
+    email = session.get('email')
+
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    if email:
+        c.execute("DELETE FROM users WHERE email=?", (email,))
+    conn.commit()
+    conn.close()
+
+    # clear user session but keep them for feedback page (no login required)
+    session.clear()
+
+    return redirect(url_for('feedback_page'))
+
+@app.route('/feedback_page')
+def feedback_page():
+    return render_template('feedback.html')
+
+@app.route('/submit_feedback', methods=['POST'])
+def submit_feedback():
+    feedback_text = request.form['feedback']
+
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute("INSERT INTO feedback (feedback) VALUES (?)", (feedback_text,))
+    conn.commit()
+    conn.close()
+
+    flash("Thank you for your feedback 💚", "success")
+    return redirect(url_for('home'))
+
+# ==============================================================
 # 💌 CONTACT PAGE
 # ==============================================================
+
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     if request.method == 'POST':
@@ -127,7 +216,10 @@ def contact():
         # Save message in database
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
-        c.execute("INSERT INTO messages (name, email, message) VALUES (?, ?, ?)", (name, email, message))
+        c.execute(
+            "INSERT INTO messages (name, email, message) VALUES (?, ?, ?)",
+            (name, email, message)
+        )
         conn.commit()
         conn.close()
 
@@ -136,8 +228,10 @@ def contact():
             print(f"📨 New contact form submitted by {name} <{email}>")
 
             # Message to admin
-            msg_admin = Message("New Contact Form Submission",
-                                recipients=['4elements.fontys@gmail.com'])
+            msg_admin = Message(
+                "New Contact Form Submission",
+                recipients=['4elements.fontys@gmail.com']
+            )
             msg_admin.body = f"""
             📬 New message from {name} ({email}):
 
@@ -148,7 +242,10 @@ def contact():
             mail.send(msg_admin)
 
             # Confirmation email to user
-            msg_user = Message("Thanks for contacting 4 Elements 💚", recipients=[email])
+            msg_user = Message(
+                "Thanks for contacting 4 Elements 💚",
+                recipients=[email]
+            )
             msg_user.body = f"""
             Hello {name},
 
@@ -175,6 +272,7 @@ def contact():
 # ==============================================================
 # 🌱 ABOUT PAGE
 # ==============================================================
+
 @app.route('/about')
 def about():
     user = session.get('user')
@@ -183,6 +281,7 @@ def about():
 # ==============================================================
 # 🔑 PASSWORD RESET FLOW
 # ==============================================================
+
 @app.route('/forgot', methods=['GET', 'POST'])
 def forgot():
     if request.method == 'POST':
@@ -200,7 +299,10 @@ def forgot():
             session['reset_email'] = email
 
             try:
-                msg = Message("Password Reset Verification Code", recipients=[email])
+                msg = Message(
+                    "Password Reset Verification Code",
+                    recipients=[email]
+                )
                 msg.body = f"""
                 Hello {user[1]},
 
@@ -250,7 +352,10 @@ def reset_password():
 
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
-        c.execute("UPDATE users SET password=? WHERE email=?", (hashed_password, email))
+        c.execute(
+            "UPDATE users SET password=? WHERE email=?",
+            (hashed_password, email)
+        )
         conn.commit()
         conn.close()
 
@@ -265,6 +370,7 @@ def reset_password():
 # ==============================================================
 # 🚀 START APP
 # ==============================================================
+
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Feedback | 4 Elements</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            background: #f8fdf9;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .box {
+            background: #fff;
+            padding: 35px 40px;
+            max-width: 520px;
+            border-radius: 18px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #1f5c3f;
+        }
+
+        p {
+            font-size: 0.95rem;
+            color: #444;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 130px;
+            border-radius: 10px;
+            border: 1px solid #ccd9d0;
+            padding: 10px 12px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            resize: vertical;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #33cc73;
+            box-shadow: 0 0 0 2px rgba(51, 204, 115, 0.15);
+        }
+
+        .btn-row {
+            margin-top: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 9px 22px;
+            border-radius: 25px;
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-submit {
+            background: #33cc73;
+            color: #fff;
+        }
+
+        .btn-submit:hover {
+            background: #1f5c3f;
+        }
+
+        .link-home {
+            font-size: 0.85rem;
+            color: #1f5c3f;
+            text-decoration: none;
+        }
+
+        .link-home:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <h1>We'd love your feedback 💬</h1>
+        <p>
+            Your account has been removed. Before you leave, could you tell us why?
+            Your feedback helps us improve 4 Elements for future users.
+        </p>
+
+        <form action="{{ url_for('submit_feedback') }}" method="POST">
+            <textarea name="feedback" placeholder="Write your feedback here..."></textarea>
+
+            <div class="btn-row">
+                <a href="{{ url_for('home') }}" class="link-home">Skip and go to homepage</a>
+                <button type="submit" class="btn btn-submit">Send feedback</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
