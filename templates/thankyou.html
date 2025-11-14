@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Thank You!</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
+    <style>
+        .thank-you-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            background: #f7f7f7;
+        }
+        .thank-you-container i {
+            font-size: 5rem;
+            color: var(--main-green);
+        }
+        .thank-you-container h1 {
+            color: var(--dark-green);
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="thank-you-container">
+        <i class="fa-solid fa-heart-circle-check"></i>
+        <h1>Mission Complete - Thank You!</h1>
+        <p>Your contribution makes a world of difference.</p>
+        <a href="{{ url_for('home') }}" class="btn primary" style="margin-top: 20px;">Back to Home</a>
+    </div>
+</body>
+</html>

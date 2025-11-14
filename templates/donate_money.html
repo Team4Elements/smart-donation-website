@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Donate Money</title>
+    <!-- Using the main stylesheet for consistent styling -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
+    <style>
+        /* Helper styles to center the form content */
+        body { background: #f7f7f7; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .form-wrapper { background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); width: 450px; text-align: center; }
+        .form-wrapper h1 { color: var(--dark-green); margin-bottom: 15px; }
+        .form-wrapper p { margin-bottom: 20px; }
+        .form-wrapper input, .form-wrapper select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #cfe7d5; background: #f9fdf9; font-family: "Open Sans", sans-serif; font-size: 1rem; }
+        
+        /* ✅ START: FIX FOR BUTTON SPACING */
+        .button-container {
+            display: flex;
+            flex-direction: column; /* Stack buttons vertically */
+            gap: 10px;             /* Add a 10px space between them */
+            margin-top: 15px;      /* Add space above the first button */
+        }
+        /* ✅ END: FIX FOR BUTTON SPACING */
+
+        /* Primary button styling (from style.css) */
+        .form-wrapper button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 30px;
+            background-color: var(--main-green);
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 1rem;
+        }
+        .form-wrapper button:hover {
+            background-color: var(--dark-green);
+        }
+
+        /* Secondary button styling (using classes from style_index.css) */
+        .btn.secondary {
+            background: transparent;
+            border: 2px solid var(--dark-green);
+            color: var(--dark-green);
+            padding: 10px 28px;
+        }
+        .btn.secondary:hover {
+            background: var(--dark-green);
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-wrapper">
+        <form action="{{ url_for('donate_money') }}" method="POST">
+            <h1>Donate Money</h1>
+            <p>This is a placeholder form. No payment will be processed.</p>
+            <input type="number" name="amount" placeholder="Amount ($)" required>
+            <select name="frequency">
+                <option value="one-time">One-Time</option>
+                <option value="monthly">Monthly</option>
+            </select>
+            <div class="button-container">
+                <button type="submit">Proceed to Payment</button>
+                <a href="{{ url_for('contribution') }}" class="btn secondary">Back to Choices</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

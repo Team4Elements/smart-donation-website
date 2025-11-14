@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Donate Food</title>
+    <!-- We link to the main CSS but will add local overrides -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
+    <style>
+        body { background: #f7f7ff; }
+        .content-wrapper { max-width: 900px; margin: 50px auto; padding: 40px; background: #fff; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
+        h1, h2 { color: var(--dark-green); text-align: center; margin-bottom: 20px; }
+        .item-list, .location-list { list-style: none; padding: 0; }
+        .item-list li, .location-list li { background: #f9f9f9; border-left: 5px solid var(--main-green); margin-bottom: 10px; padding: 15px; border-radius: 8px; }
+        .item-list strong { color: var(--dark-green); }
+        .urgency-High { color: #d9534f; font-weight: bold; }
+        .urgency-Medium { color: #f0ad4e; font-weight: bold; }
+
+        /* ✅ START: LOCAL BUTTON STYLES */
+        .btn {
+            padding: 10px 28px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.3s ease;
+            display: inline-block;
+        }
+        .btn.secondary {
+            background: transparent;
+            border: 2px solid var(--dark-green);
+            color: var(--dark-green);
+            padding: 10px 33px; /* Match height */
+        }
+        .btn.secondary:hover {
+            background: var(--dark-green);
+            color: #fff;
+            transform: scale(1.05);
+        }
+        /* ✅ END: LOCAL BUTTON STYLES */
+
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <h1>Donate Food Items</h1>
+        
+        <h2>Most Needed Items</h2>
+        <ul class="item-list">
+            {% for item in items %}
+            <li>
+                <strong>{{ item[0] }}</strong> - {{ item[1] }} 
+                <span class="urgency-{{ item[2] }}"> (Urgency: {{ item[2] }})</span>
+            </li>
+            {% else %}
+            <li>No items listed right now. Please check back later!</li>
+            {% endfor %}
+        </ul>
+
+        <h2 style="margin-top: 40px;">Drop-Off Locations & Hours</h2>
+        <ul class="location-list">
+            {% for loc in locations %}
+            <li>
+                <strong>{{ loc[0] }}</strong><br>
+                Address: {{ loc[1] }}<br>
+                Hours: {{ loc[2] }}
+            </li>
+            {% endfor %}
+        </ul>
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="{{ url_for('contribution') }}" class="btn secondary">Back to Choices</a>
+        </div>
+    </div>
+</body>
+</html>

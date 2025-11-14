@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Changed Title -->
+    <title>My Donor Account | 4 Elements</title>
+
+    <!-- Fonts & Icons -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- Copied all styles from account.html to ensure identical appearance -->
+    <style>
+        :root {
+            --main-green: #33cc73;
+            --dark-green: #1f5c3f;
+            --light-bg: #f8fdf9;
+            --gray: #666;
+            --card-radius: 18px;
+        }
+        * { box-sizing: border-box; }
+        body { font-family: "Poppins", sans-serif; background: var(--light-bg); color: #1f1f1f; margin: 0; padding: 0; }
+        header { background: #fff; padding: 18px 8%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); position: sticky; top: 0; z-index: 50; }
+        .logo { display: flex; align-items: center; font-weight: 700; color: var(--dark-green); font-size: 22px; }
+        .logo i { color: var(--main-green); margin-right: 8px; }
+        .nav-links a { margin: 0 15px; text-decoration: none; color: var(--dark-green); font-weight: 500; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--main-green); }
+        .header-actions { display: flex; gap: 10px; align-items: center; }
+        .logout-btn, .delete-header-btn { padding: 8px 20px; border-radius: 25px; text-decoration: none; font-weight: 600; border: 2px solid transparent; transition: 0.25s ease; font-size: 0.9rem; }
+        .logout-btn { background: var(--main-green); color: #fff; }
+        .logout-btn:hover { background: var(--dark-green); }
+        .delete-header-btn { background: #fff; color: #e53935; border-color: #ffcdd2; }
+        .delete-header-btn:hover { background: #ffebee; }
+        main { padding: 40px 6% 60px; }
+        .profile-container { max-width: 1100px; margin: 0 auto 40px; background: #fff; border-radius: 20px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06); padding: 40px 50px; display: flex; align-items: center; justify-content: space-between; gap: 40px; animation: fadeUp 0.7s ease; }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
+        .profile-info { flex: 1.2; }
+        .profile-info h1 { color: var(--dark-green); font-size: 2rem; margin-bottom: 8px; }
+        .profile-info p { color: var(--gray); font-size: 0.98rem; line-height: 1.6; }
+        .profile-card { flex: 1; background: linear-gradient(135deg, var(--main-green), var(--dark-green)); border-radius: 18px; padding: 40px 30px; color: #fff; text-align: center; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .profile-card:hover { transform: translateY(-6px); box-shadow: 0 16px 35px rgba(0, 0, 0, 0.25); }
+        .profile-card i { font-size: 3rem; margin-bottom: 15px; }
+        .profile-card h2 { margin-bottom: 5px; font-weight: 600; }
+        .profile-card span { font-size: 0.95rem; opacity: 0.9; }
+        .actions { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 25px; }
+        .actions a { padding: 10px 26px; border-radius: 25px; font-weight: 600; text-decoration: none; transition: 0.25s ease; font-size: 0.9rem; }
+        .edit-btn { background: #fff; color: var(--main-green); border: 2px solid var(--main-green); }
+        .edit-btn:hover { background: var(--main-green); color: #fff; }
+        .change-pass { background: var(--main-green); color: #fff; }
+        .change-pass:hover { background: var(--dark-green); }
+        .dashboard-wrapper { max-width: 1100px; margin: 0 auto; background: #fff; border-radius: 20px; padding: 35px 40px 40px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05); animation: fadeUp 0.7s ease 0.05s backwards; }
+        .dashboard-header { text-align: center; margin-bottom: 25px; }
+        .dashboard-header h2 { margin: 0; font-size: 1.6rem; color: var(--dark-green); }
+        .dashboard-header p { margin-top: 6px; color: var(--gray); font-size: 0.95rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-bottom: 25px; }
+        .stat-card { border-radius: var(--card-radius); padding: 18px 20px; color: #fff; display: flex; flex-direction: column; justify-content: space-between; min-height: 120px; position: relative; overflow: hidden; cursor: pointer; transform: translateY(0); transition: transform 0.35s ease, box-shadow 0.35s ease, transform 0.2s ease-out; }
+        .stat-card::after { content: ""; position: absolute; right: -10px; bottom: -20px; width: 80px; height: 80px; background: rgba(255, 255, 255, 0.18); border-radius: 50%; filter: blur(3px); }
+        .stat-card:hover { transform: translateY(-6px) scale(1.01); box-shadow: 0 18px 35px rgba(0, 0, 0, 0.25); }
+        .stat-icon { font-size: 1.3rem; margin-bottom: 10px; }
+        .stat-value { font-size: 1.7rem; font-weight: 700; }
+        .stat-label { font-size: 0.9rem; opacity: 0.94; }
+        .stat-sub { font-size: 0.78rem; opacity: 0.9; }
+        .stat-1 { background: linear-gradient(135deg, #1abc9c, #16a085); }
+        .stat-2 { background: linear-gradient(135deg, #00c6ff, #0072ff); }
+        .stat-3 { background: linear-gradient(135deg, #00b09b, #96c93d); }
+        .stat-4 { background: linear-gradient(135deg, #f7971e, #ffd200); color: #14401b; }
+        .dashboard-main { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; }
+        .card-panel { background: #f9fdfb; border-radius: 18px; padding: 20px 22px; border: 1px solid #edf5ef; box-shadow: 0 8px 18px rgba(0, 0, 0, 0.03); }
+        .panel-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+        .panel-header i { color: var(--main-green); }
+        .panel-header h3 { margin: 0; font-size: 1rem; color: var(--dark-green); }
+        .panel-header span { font-size: 0.82rem; color: var(--gray); }
+        .activity-list { margin: 0; padding: 0; list-style: none; }
+        .activity-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: 12px; background: #ffffff; margin-bottom: 8px; transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease; cursor: pointer; }
+        .activity-item:hover { background: #f2fbf6; transform: translateY(-2px); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.04); }
+        .activity-main { display: flex; align-items: center; gap: 10px; }
+        .activity-icon { width: 32px; height: 32px; border-radius: 50%; background: rgba(51, 204, 115, 0.12); display: flex; align-items: center; justify-content: center; color: var(--main-green); }
+        .activity-title { font-size: 0.9rem; font-weight: 500; }
+        .activity-time { font-size: 0.8rem; color: var(--gray); }
+        .chart-placeholder { border-radius: 16px; background: #f3fbf6; border: 1px dashed #c6e9d6; height: 210px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px; }
+        .chart-badge { width: 45px; height: 45px; border-radius: 50%; background: #e1f7eb; display: flex; align-items: center; justify-content: center; color: var(--main-green); margin-bottom: 5px; }
+        .chart-title { font-weight: 600; font-size: 0.98rem; color: var(--dark-green); }
+        .chart-text { font-size: 0.82rem; color: var(--gray); max-width: 260px; }
+        .chart-pill { background: #ffffff; border-radius: 999px; padding: 5px 14px; border: 1px solid #dcefe3; font-size: 0.78rem; margin-top: 4px; }
+        footer { text-align: center; color: #777; padding: 22px 0 10px; font-size: 0.9rem; }
+        @media (max-width: 960px) { .profile-container { flex-direction: column; padding: 30px 25px; } .dashboard-main { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        @media (max-width: 640px) { header { padding: 14px 16px; } .nav-links { display: none; } main { padding: 25px 12px 40px; } .stats-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-hand-holding-heart"></i> 4 Elements
+        </div>
+
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="#projects">Projects</a>
+            <a href="{{ url_for('about') }}">About</a>
+        </div>
+
+        <div class="header-actions">
+            <a href="{{ url_for('delete_account_page') }}" class="delete-header-btn">Delete Account</a>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- PROFILE CARD -->
+        <section class="profile-container">
+            <div class="profile-info">
+                <!-- Donor-specific welcome message -->
+                <h1>Welcome, {{ food_bank_name }} 🏦</h1>
+                <p>
+                    You are logged in as a Food Bank Partner. Here you can manage incoming donations,
+                    post new requests for items, and see your impact on the community.
+                </p>
+
+                <div class="actions">
+                    <!-- Donor-specific actions -->
+                    <a href="#" class="change-pass">Post Needed Items</a>
+                    <a href="#" class="edit-btn">Manage Food Bank Info</a>
+                </div>
+            </div>
+
+            <div class="profile-card">
+                <i class="fa-solid fa-landmark"></i>
+                <h2>{{ name }}</h2>
+                <!-- Changed role description -->
+                <span>Food Bank Partner</span>
+            </div>
+        </section>
+
+        <!-- DASHBOARD -->
+        <section class="dashboard-wrapper">
+            <div class="dashboard-header">
+                <!-- Changed dashboard title -->
+                <h2>Your Food Bank Dashboard 📊</h2>
+                <p>Track incoming donations and community engagement.</p>
+            </div>
+
+            <!-- Top stats - Changed to be donor-relevant -->
+            <div class="stats-grid">
+                <div class="stat-card stat-1">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-box-open"></i>
+                    </div>
+                    <div class="stat-value">{{ food_received }}</div>
+                    <div class="stat-label">Food Received</div>
+                    <div class="stat-sub">total items</div>
+                </div>
+
+                <div class="stat-card stat-2">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-bullhorn"></i>
+                    </div>
+                    <div class="stat-value">{{ active_requests }}</div>
+                    <div class="stat-label">Active Requests</div>
+                    <div class="stat-sub">items needed</div>
+                </div>
+
+                <div class="stat-card stat-3">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <div class="stat-value">{{ donors_connected }}</div>
+                    <div class="stat-label">Donors Connected</div>
+                    <div class="stat-sub">community members</div>
+                </div>
+
+                <div class="stat-card stat-4">
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-handshake-angle"></i>
+                    </div>
+                    <div class="stat-value">{{ volunteers_managed }}</div>
+                    <div class="stat-label">Volunteers</div>
+                    <div class="stat-sub">people helping</div>
+                </div>
+            </div>
+
+            <!-- Bottom panels -->
+            <div class="dashboard-main">
+                <!-- Recent Activity - Changed to show incoming donations -->
+                <div class="card-panel">
+                    <div class="panel-header">
+                        <i class="fa-regular fa-calendar-check"></i>
+                        <div>
+                            <h3>Recent Incoming Donations</h3>
+                            <span>Latest items received</span>
+                        </div>
+                    </div>
+
+                    <ul class="activity-list">
+                        {% for item, time in donor_activity %}
+                        <li class="activity-item">
+                            <div class="activity-main">
+                                <div class="activity-icon">
+                                    <i class="fa-solid fa-gift"></i>
+                                </div>
+                                <div>
+                                    <div class="activity-title">{{ item }}</div>
+                                    <div class="activity-time">{{ time }}</div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <!-- Chart placeholder - Changed text to be donor-relevant -->
+                <div class="card-panel">
+                    <div class="panel-header">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <div>
+                            <h3>Donation Trends</h3>
+                            <span>Charts coming soon</span>
+                        </div>
+                    </div>
+
+                    <div class="chart-placeholder">
+                        <div class="chart-badge">
+                            <i class="fa-solid fa-arrow-trend-up"></i>
+                        </div>
+                        <div class="chart-title">Future Chart Area</div>
+                        <div class="chart-text">
+                            This area will visualize your incoming donations by category and show you
+                            trends over time.
+                        </div>
+                        <div class="chart-pill">Placeholder for charts</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        © 2025 4 Elements — Building kindness together.
+    </footer>
+</body>
+</html>
