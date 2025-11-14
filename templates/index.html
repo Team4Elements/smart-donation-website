@@ -34,13 +34,22 @@
             <a href="{{ url_for('contact') }}">Contact</a>
         </nav>
 
+        
         <div class="nav-right">
             {% if user %}
-            <span class="welcome-text">👋 Welcome, <strong>{{ user }}</strong></span>
-            <a href="{{ url_for('account') }}" class="btn btn-dashboard">My Account</a>
-            <a href="{{ url_for('logout') }}" class="btn btn-login">Logout</a> {% else %}
-            <a href="{{ url_for('login_page') }}" class="btn btn-login">Login</a>
-            <a href="{{ url_for('login_page') }}" class="btn btn-dashboard">Dashboard</a> {% endif %}
+                <span class="welcome-text">👋 Welcome, <strong>{{ user }}</strong></span>
+
+                {% if user_type == 'donor' %}
+                    <a href="{{ url_for('account_donor') }}" class="btn btn-dashboard">My Account</a>
+                {% else %}
+                    <a href="{{ url_for('account') }}" class="btn btn-dashboard">My Account</a>
+                {% endif %}
+
+                <a href="{{ url_for('logout') }}" class="btn btn-login">Logout</a>
+            {% else %}
+                <a href="{{ url_for('login_page') }}" class="btn btn-login">Login</a>
+                <a href="{{ url_for('login_page') }}" class="btn btn-dashboard">Dashboard</a>
+            {% endif %}
         </div>
     </header>
 
@@ -55,47 +64,22 @@
             {% endif %}
 
             <div class="hero-buttons">
-                <a href="{% if user %}{{ url_for('account') }}{% else %}{{ url_for('login_page') }}{% endif %}" class="btn primary">Start Donating</a>
+                <!-- This button also needs the same logic -->
+                {% if user %}
+                    {% if user_type == 'donor' %}
+                        <a href="{{ url_for('contribution') }}" class="btn primary">Start Donating</a>
+                    {% else %}
+                         <a href="{{ url_for('account') }}" class="btn primary">Start Donating</a>
+                    {% endif %}
+                {% else %}
+                    <a href="{{ url_for('login_page') }}" class="btn primary">Start Donating</a>
+                {% endif %}
                 <a href="{{ url_for('about') }}" class="btn secondary">Our Story</a>
             </div>
         </div>
     </section>
 
-    <!-- Impact Wrapper -->
-    <div class="impact-wrapper">
-
-        <div class="current_impact-header fade-in">
-            <h2>Our Principles</h2>
-        </div>
-        <!-- Impact Section -->
-        <div class="impact-section">
-            <div class="impact-card">
-                <i class="fa-solid fa-handshake-angle"></i>
-                <h3>Global Connection</h3>
-                <p>Bringing donors, charities, and communities together to make real impact.</p>
-            </div>
-            <div class="impact-card">
-                <i class="fa-solid fa-seedling"></i>
-                <h3>Sustainable Future</h3>
-                <p>Transforming food waste into opportunities for nourishment and growth.</p>
-            </div>
-            <div class="impact-card">
-                <i class="fa-solid fa-people-group"></i>
-                <h3>Community First</h3>
-                <p>Empowering people to care, share, and support each other through action.</p>
-            </div>
-            <div class="impact-card">
-                <i class="fa-solid fa-heart-circle-check"></i>
-                <h3>Kindness in Motion</h3>
-                <p>Every act of giving fuels hope — and hope can change everything.</p>
-            </div>
-        </div>
-
-
-    <!-- Spacer between sections -->
-    <div class="section-spacer"></div>
-
-    <!-- Current Impact Section -->
+     <!-- Current Impact Section -->
 
         <div class="current_impact-header fade-in">
             <h2>Current Impact</h2>

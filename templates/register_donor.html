@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor Registration</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- 🌸 Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %}
+    <div class="flash-container">
+        {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% set _ = session.pop('_flashes', None) %} {% endif %} {% endwith %}
+
+    <div class="container small">
+        <form action="{{ url_for('register_donor') }}" method="POST">
+            <h1>Create Donor Account</h1>
+            <span>Register as a food bank representative</span>
+            <input type="text" name="name" placeholder="Full Name" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+            <input type="text" name="food_bank_name" placeholder="Food Bank Name" required>
+            <input type="text" name="address" placeholder="Food Bank Address" required>
+            <button type="submit">Register</button>
+            <a href="{{ url_for('login_page_donor') }}">Already have a donor account? Login</a>
+        </form>
+    </div>
+
+</body>
+
+</html>
