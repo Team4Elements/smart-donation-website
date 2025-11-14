@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Helping Journey | 4 Elements</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
+
 
     <style>
          :root {
@@ -271,6 +273,32 @@
 </head>
 
 <body>
+    <!-- Navbar copied from index.html -->
+    <header class="navbar">
+        <div class="logo">
+            <div class="logo-top">
+                <i class="fa-solid fa-hand-holding-heart"></i>
+                <span>4ELEMENTS</span>
+            </div>
+            <span class="logo-subtext">Funding Tomorrow’s Solutions Today</span>
+        </div>
+
+        <nav class="nav-center">
+            <a href="/" class="active">Home</a>
+            <a href="{{ url_for('about') }}">About</a>
+            <a href="{{ url_for('projects') }}">Projects</a>
+            <a href="{{ url_for('contact') }}">Contact</a>
+        </nav>
+
+        <div class="nav-right">
+            {% if user %}
+            <span class="welcome-text">👋 Welcome, <strong>{{ user }}</strong></span>
+            <a href="{{ url_for('account') }}" class="btn btn-dashboard">My Account</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-login">Logout</a> {% else %}
+            <a href="{{ url_for('login_page') }}" class="btn btn-login">Login</a>
+            <a href="{{ url_for('login_page') }}" class="btn btn-dashboard">Dashboard</a> {% endif %}
+        </div>
+    </header>
 
     <div class="header">
         <h1>The Helping Journey 🤍</h1>
