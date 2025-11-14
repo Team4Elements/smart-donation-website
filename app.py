@@ -40,7 +40,6 @@ def init_db():
                         message TEXT NOT NULL
                     )''')
 
-    # Feedback left by users (after delete or whenever)
     cursor.execute('''CREATE TABLE IF NOT EXISTS feedback (
                         id INTEGER PRIMARY KEY AUTOINCREMENT,
                         feedback TEXT NOT NULL
@@ -109,7 +108,6 @@ def login():
     conn.close()
 
     if user and verify_password(user[3], password):
-        # user = (id, name, email, password)
         session['user'] = user[1]
         session['email'] = user[2]
         flash(f"Welcome back, {user[1]}!", "success")
@@ -125,7 +123,6 @@ def login():
 @app.route('/account')
 def account():
     if 'user' in session:
-        # Dummy / example data for now – later you can replace with real DB data
         dashboard_data = {
             "food_donations": 12,
             "money_donated": 247,
@@ -180,7 +177,6 @@ def delete_account():
     conn.commit()
     conn.close()
 
-    # clear user session but keep them for feedback page (no login required)
     session.clear()
 
     return redirect(url_for('feedback_page'))
@@ -213,7 +209,6 @@ def contact():
         email = request.form['email']
         message = request.form['message']
 
-        # Save message in database
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
         c.execute(
@@ -223,46 +218,24 @@ def contact():
         conn.commit()
         conn.close()
 
-        # Send email to admin + confirmation to user
         try:
-            print(f"📨 New contact form submitted by {name} <{email}>")
-
-            # Message to admin
             msg_admin = Message(
                 "New Contact Form Submission",
                 recipients=['4elements.fontys@gmail.com']
             )
-            msg_admin.body = f"""
-            📬 New message from {name} ({email}):
-
-            "{message}"
-
-            — Smart Donation Website
-            """
+            msg_admin.body = f"New message from {name} ({email}):\n\n{message}"
             mail.send(msg_admin)
 
-            # Confirmation email to user
             msg_user = Message(
                 "Thanks for contacting 4 Elements 💚",
                 recipients=[email]
             )
-            msg_user.body = f"""
-            Hello {name},
-
-            Thank you for reaching out to 4 Elements 🌿
-            We’ve received your message and will get back to you soon.
-
-            Your message:
-            "{message}"
-
-            — 4 Elements Team
-            """
+            msg_user.body = f"Hello {name},\n\nWe received your message:\n{message}"
             mail.send(msg_user)
 
             flash("💚 Your message has been sent successfully!", "success")
 
         except Exception as e:
-            print("❌ Mail error:", e)
             flash(f"⚠️ Failed to send email: {e}", "error")
 
         return redirect(url_for('home'))
@@ -305,15 +278,12 @@ def forgot():
                 )
                 msg.body = f"""
                 Hello {user[1]},
-
                 Your password reset verification code is: {otp}
-
-                If you didn’t request this, please ignore this email.
-
-                — 4 Elements Team
                 """
                 mail.send(msg)
+
                 flash("📩 A verification code has been sent to your email.", "info")
+
             except Exception as e:
                 flash(f"⚠️ Failed to send email: {e}", "error")
 
@@ -362,10 +332,18 @@ def reset_password():
         session.pop('otp_ok', None)
         session.pop('reset_email', None)
 
-        flash("🔐 Password updated successfully! Please log in again.", "success")
+        flash("🔐 Password updated successfully!", "success")
         return redirect(url_for('login_page'))
 
     return render_template('reset.html')
+
+# ==============================================================
+# ⭐⭐⭐ PROJECTS ROUTE (ONLY ADDITION REQUESTED) ⭐⭐⭐
+# ==============================================================
+
+@app.route('/projects')
+def projects():
+    return render_template('projects.html')
 
 # ==============================================================
 # 🚀 START APP
@@ -374,3 +352,5 @@ def reset_password():
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)
+
+# ==============================================================

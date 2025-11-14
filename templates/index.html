@@ -12,12 +12,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
 
-       <!-- Leaflet CSS -->
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
-    <!-- ✅ CSS file -->
+    <!-- CSS file -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
 </head>
 
@@ -35,7 +33,7 @@
         <nav class="nav-center">
             <a href="/" class="active">Home</a>
             <a href="{{ url_for('about') }}">About</a>
-            <a href="#">Projects</a>
+            <a href="{{ url_for('projects') }}">Projects</a>
             <a href="{{ url_for('contact') }}">Contact</a>
         </nav>
 
@@ -72,6 +70,7 @@
         <div class="current_impact-header fade-in">
             <h2>Our Values</h2>
         </div>
+
         <!-- Impact Section -->
         <div class="impact-section">
             <div class="impact-card">
@@ -96,11 +95,7 @@
             </div>
         </div>
 
-
-    <!-- Spacer between sections -->
-    <div class="section-spacer"></div>
-
-    <!-- Current Impact Section -->
+        <div class="section-spacer"></div>
 
         <div class="current_impact-header fade-in">
             <h2>Current Impact</h2>
@@ -123,65 +118,55 @@
                 <h3>Volunteers</h3>
                 <p class="count" data-target="150">0</p>
             </div>
-            
         </div>
 
-        <!-- Spacer between sections -->
         <div class="section-spacer"></div>
 
-        <!-- How It Works Section -->
-        
         <div class="how-it-works-header fade-in">
             <h2>How It Works</h2>
             <p>From donation to impact — see how your contribution makes a real difference.</p>
         </div>
 
         <div class="how-it-works-cards">
-
-            <!-- Card 1 -->
             <div class="how-card">
                 <img src="{{ url_for('static', filename='food.jpg') }}" alt="Food">
                 <h3>Post Food</h3>
                 <p>Share what you have to donate.</p>
             </div>
 
-            <!-- Card 2 -->
             <div class="how-card">
                 <img src="{{ url_for('static', filename='verification.jpg') }}" alt="Verify">
                 <h3>Verified by Food Bank</h3>
                 <p>We ensure all donations are safe.</p>
             </div>
 
-            <!-- Card 3 -->
             <div class="how-card">
                 <img src="{{ url_for('static', filename='family.jpg') }}" alt="Family">
                 <h3>Delivered to Families</h3>
                 <p>Food is delivered to families in need.</p>
             </div>
-
         </div>
 
-        <!-- Spacer between sections -->
         <div class="section-spacer"></div>
 
         <div class="how-it-works-header fade-in">
-            <h2>Locations of the Food banks</h2>
+            <h2>Locations of the Food Banks</h2>
         </div>
 
         <div class="map-container">
             <div id="map"></div>
         </div>
 
-
-
     </div>
 
+    <!-- Scripts -->
     <script>
         window.addEventListener("scroll", () => {
             const navbar = document.querySelector(".navbar");
             navbar.classList.toggle("scrolled", window.scrollY > 50);
         });
     </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const counters = document.querySelectorAll('.count');
@@ -190,9 +175,9 @@
                 const updateCount = () => {
                     const target = +counter.getAttribute('data-target');
                     const count = +counter.innerText;
-                    const increment = target / 800; // adjust speed here
+                    const increment = target / 800;
 
-                    if(count < target){
+                    if (count < target) {
                         counter.innerText = Math.ceil(count + increment);
                         setTimeout(updateCount, 80);
                     } else {
@@ -218,50 +203,43 @@
             }
 
             window.addEventListener("scroll", checkVisibility);
-            checkVisibility(); // run once in case elements are already in view
+            checkVisibility();
         });
     </script>
 
-     <!-- Leaflet JS -->
+    <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
-        // Centered roughly on the Netherlands
         const map = L.map("map").setView([52.1326, 5.2913], 7);
 
-        // Add a tile layer (this one looks like Google Maps)
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution: "© OpenStreetMap contributors",
+            maxZoom: 19,
+            attribution: "© OpenStreetMap contributors",
         }).addTo(map);
 
-        // Example locations (use real ones later)
-        const locations = [
-        {
+        const locations = [{
             name: "Amsterdam Food Bank",
             address: "Havenstraat 12, Amsterdam",
-            coords: [52.3702, 4.8952],
-        },
-        {
+            coords: [52.3702, 4.8952]
+        }, {
             name: "Rotterdam Community Kitchen",
             address: "Coolsingel 22, Rotterdam",
-            coords: [51.9244, 4.4777],
-        },
-        {
+            coords: [51.9244, 4.4777]
+        }, {
             name: "Utrecht Donation Center",
             address: "Vredenburg 40, Utrecht",
-            coords: [52.0907, 5.1214],
-        },
-        ];
+            coords: [52.0907, 5.1214]
+        }];
 
-        // Add markers
-        locations.forEach((loc) => {
-        L.marker(loc.coords)
-            .addTo(map)
-            .bindPopup(`<b>${loc.name}</b><br>${loc.address}`);
+        locations.forEach(loc => {
+            L.marker(loc.coords)
+                .addTo(map)
+                .bindPopup(`<b>${loc.name}</b><br>${loc.address}`);
         });
     </script>
 
+    {% include 'footer.html' %}
 </body>
 
 </html>
