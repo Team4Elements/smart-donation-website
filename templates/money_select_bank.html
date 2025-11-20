@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Select Food Bank | 4 Elements</title>
+
+    <!-- Icons + Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+         :root {
+            --main-green: #33cc73;
+            --dark-green: #1f5c3f;
+            --light-bg: #f6fdf9;
+            --gray: #555;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: var(--light-bg);
+            font-family: "Poppins", sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        /* ===================================================
+           NAVBAR
+        =================================================== */
+        
+        header {
+            background: #fff;
+            padding: 16px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+            position: sticky;
+            top: 0;
+            z-index: 200;
+        }
+        
+        .logo {
+            font-weight: 700;
+            color: var(--dark-green);
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 8px;
+            color: var(--main-green);
+        }
+        
+        nav a {
+            margin: 0 16px;
+            text-decoration: none;
+            color: var(--dark-green);
+            font-weight: 500;
+            transition: 0.25s ease;
+        }
+        
+        nav a:hover {
+            color: var(--main-green);
+        }
+        
+        .back-btn {
+            padding: 8px 20px;
+            background: var(--main-green);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: 0.25s;
+        }
+        
+        .back-btn:hover {
+            background: var(--dark-green);
+        }
+        /* ===================================================
+           PAGE TITLE
+        =================================================== */
+        
+        h1 {
+            text-align: center;
+            margin-top: 40px;
+            color: var(--dark-green);
+            font-weight: 600;
+            font-size: 1.9rem;
+            animation: fadeInDown 0.7s ease;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-14px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* ===================================================
+           BANK GRID
+        =================================================== */
+        
+        .bank-grid {
+            margin: 40px 6%;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        
+        .bank-card {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: 0.25s ease;
+            cursor: pointer;
+            animation: fadeUp 0.6s ease;
+        }
+        
+        .bank-card:hover {
+            transform: translateY(-6px);
+        }
+        
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .bank-img {
+            height: 150px;
+            background-position: center;
+            background-size: cover;
+        }
+        /* Avatar fallback */
+        
+        .avatar {
+            height: 150px;
+            background: #e8f9ef;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            color: var(--main-green);
+        }
+        
+        .bank-content {
+            padding: 18px 20px;
+        }
+        
+        .bank-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--dark-green);
+        }
+        
+        .bank-address {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin: 6px 0;
+        }
+        
+        .bank-distance {
+            font-size: 0.9rem;
+            color: var(--main-green);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .donate-btn {
+            display: inline-block;
+            width: 100%;
+            padding: 10px 0;
+            background: var(--main-green);
+            color: #fff;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.25s ease;
+            text-align: center;
+        }
+        
+        .donate-btn:hover {
+            background: var(--dark-green);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-hand-holding-heart"></i> 4 Elements
+        </div>
+
+        <nav>
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('about') }}">About</a>
+            <a href="{{ url_for('projects') }}">Projects</a>
+        </nav>
+
+        <a href="{{ url_for('contribution') }}" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i> Back
+        </a>
+    </header>
+
+    <h1>Select a Food Bank to Donate Money</h1>
+
+    <div class="bank-grid">
+        {% for bank in banks %}
+        <div class="bank-card">
+
+            {% if bank[4] %}
+            <div class="bank-img" style="background-image:url('{{ bank[4] }}');"></div>
+            {% else %}
+            <!-- Avatar fallback -->
+            <div class="avatar">
+                <i class="fa-solid fa-building"></i>
+            </div>
+            {% endif %}
+
+            <div class="bank-content">
+                <div class="bank-title">{{ bank[1] }}</div>
+                <div class="bank-address">📍 {{ bank[2] }}</div>
+                <div class="bank-distance">📏 {{ bank[3] }} km away</div>
+
+                <a href="{{ url_for('donate_money_bank', donor_id=bank[0]) }}" class="donate-btn">
+                    Donate Money
+                </a>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+
+</body>
+
+</html>

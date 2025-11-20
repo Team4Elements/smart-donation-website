@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Need Help? | 4 Elements</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        body {
+            background: #f4faf6;
+            font-family: Poppins, sans-serif;
+        }
+        
+        .help-hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #2f5843, #4caf50);
+            color: white;
+            border-radius: 0 0 40px 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .help-hero h1 {
+            font-size: 40px;
+            font-weight: 700;
+        }
+        
+        .help-section {
+            max-width: 900px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 20px;
+        }
+        
+        .card {
+            background: #fff;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.10);
+            transition: 0.25s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card i {
+            font-size: 35px;
+            color: #2f9e44;
+            margin-bottom: 14px;
+        }
+        
+        .card h3 {
+            margin-bottom: 12px;
+            color: #2f5843;
+        }
+        
+        .locations-list p {
+            padding: 8px 0;
+            border-bottom: 1px dashed #d6e5db;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <div class="logo">
+            <div class="logo-top">
+                <i class="fa-solid fa-hand-holding-heart"></i>
+                <span>4ELEMENTS</span>
+            </div>
+            <span class="logo-subtext">Funding Tomorrow’s Solutions Today</span>
+        </div>
+
+        <nav class="nav-center">
+            <a href="/" class="active">Home</a>
+            <a href="{{ url_for('about') }}">About</a>
+            <a href="{{ url_for('projects') }}">Projects</a>
+            <a href="{{ url_for('contact') }}">Contact</a>
+        </nav>
+
+        <div class="nav-right">
+            {% if session.get('user') %} {% if session.get('user_type') == 'donor' %}
+            <a href="{{ url_for('account_donor') }}" class="btn btn-dashboard">My Account</a> {% else %}
+            <a href="{{ url_for('account') }}" class="btn btn-dashboard">My Account</a> {% endif %}
+            <a href="{{ url_for('logout') }}" class="btn btn-login">Logout</a> {% else %}
+            <a href="{{ url_for('login_page') }}" class="btn btn-login">Login</a>
+            <a href="{{ url_for('login_page') }}" class="btn btn-dashboard">Dashboard</a> {% endif %}
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <div class="help-hero">
+        <h1>We're Here For You 💚</h1>
+        <p>No one should face hunger alone. Let us guide you with care, dignity, and support.</p>
+    </div>
+
+    <!-- Content -->
+    <div class="help-section">
+
+        <div class="card">
+            <i class="fa-solid fa-circle-question"></i>
+            <h3>First Time Visiting?</h3>
+            <p>If this is your first time at a food bank, no worries — you're welcome, and you're not alone.</p>
+            <ul>
+                <li>Bring ID (if possible)</li>
+                <li>Bring reusable bags for food</li>
+                <li>Check opening hours before you go</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <i class="fa-solid fa-map-location-dot"></i>
+            <h3>Food Bank Locations</h3>
+            <div id="locations" class="locations-list">Loading...</div>
+        </div>
+
+        <div class="card">
+            <i class="fa-solid fa-hand-holding-hand"></i>
+            <h3>Urgent Help</h3>
+            <p>If you need immediate support, please contact your nearest food bank or emergency services.</p>
+            <p>Email: help@4elements.org</p>
+            <p>Phone: +31 6 123 456 78</p>
+        </div>
+
+    </div>
+
+    <script>
+        fetch("/api/foodbanks")
+            .then(res => res.json())
+            .then(banks => {
+                const div = document.getElementById("locations");
+                div.innerHTML = "";
+
+                if (banks.length === 0) {
+                    div.innerHTML = "<p>No food banks available yet.</p>";
+                    return;
+                }
+
+                banks.forEach(b => {
+                    div.innerHTML += `<p><b>${b.name}</b><br>${b.address}</p>`;
+                });
+            });
+    </script>
+
+    {% include 'footer.html' %}
+
+</body>
+
+</html>

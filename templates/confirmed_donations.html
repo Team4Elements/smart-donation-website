@@ -1,0 +1,123 @@
+{% extends "base.html" %} {% block content %}
+
+<style>
+    body {
+        font-family: "Poppins", sans-serif;
+        background: #f4faf6;
+    }
+    
+    .wrapper {
+        max-width: 950px;
+        margin: 40px auto;
+    }
+    
+    h1 {
+        color: #1e3f2e;
+        margin-bottom: 10px;
+    }
+    
+    .sub {
+        color: #5f7568;
+        margin-bottom: 25px;
+        font-size: 14px;
+    }
+    
+    table {
+        width: 100%;
+        background: white;
+        border-radius: 18px;
+        overflow: hidden;
+        border-collapse: collapse;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    }
+    
+    th {
+        background: #2e8f55;
+        color: white;
+        font-size: 14px;
+        padding: 12px;
+        font-weight: 600;
+    }
+    
+    td {
+        text-align: center;
+        padding: 14px;
+        border-bottom: 1px solid #eef2ef;
+        font-size: 14px;
+        color: #1e3f2e;
+    }
+    
+    tr:last-child td {
+        border-bottom: none;
+    }
+    
+    .points {
+        background: #d1f7df;
+        color: #176b40;
+        padding: 4px 12px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 13px;
+        display: inline-block;
+    }
+    
+    .empty {
+        text-align: center;
+        color: #7a8b80;
+        margin-top: 40px;
+        font-size: 15px;
+    }
+    
+    .back-btn {
+        margin-top: 20px;
+        display: inline-block;
+        text-decoration: none;
+        background: #2e8f55;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 12px;
+        transition: 0.2s ease;
+    }
+    
+    .back-btn:hover {
+        background: #236c42;
+    }
+</style>
+
+<div class="wrapper">
+
+    <h1>Confirmed Donations</h1>
+    <p class="sub">A full history of all approved and completed donations.</p>
+
+    {% if donations %}
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Urgency</th>
+            <th>Earned Points</th>
+            <th>Date</th>
+        </tr>
+
+        {% for d in donations %}
+        <tr>
+            <td>{{ d[2] }}</td>
+            <td>{{ d[3] }}</td>
+            <td>{{ d[4] }}</td>
+            <td>
+                <span class="points">{{ d[5] }} pts</span>
+            </td>
+            <td>{{ d[6] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% else %}
+    <p class="empty">No confirmed donations yet.</p>
+    {% endif %}
+
+    <a href="/account_donor" class="back-btn">← Back to Dashboard</a>
+
+</div>
+
+{% endblock %}

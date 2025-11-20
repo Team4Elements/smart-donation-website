@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Donation Promises</title>
+    <style>
+        body {
+            background: #f4faf6;
+            font-family: Poppins, sans-serif;
+            padding: 40px;
+        }
+        
+        .box {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+        }
+        
+        h2 {
+            margin: 0 0 20px;
+            color: #2e8f55;
+        }
+        
+        .promise {
+            padding: 15px;
+            border-bottom: 1px solid #e8f2ec;
+        }
+        
+        .btn-accept {
+            background: #2e8f55;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+        }
+        
+        .btn-decline {
+            background: #d9534f;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 10px;
+            margin-left: 10px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="box">
+
+        <h2>Donation Promises</h2>
+
+        {% if promises %} {% for p in promises %}
+        <div class="promise">
+            <strong>{{ p[2] }}</strong> — {{ p[3] }} items
+            <br> Urgency: <b>{{ p[4] }}</b>
+            <br> From User ID: {{ p[1] }}
+            <br><br>
+
+            <a class="btn-accept" href="/donor/promise/accept/{{ p[0] }}">Accept</a>
+            <a class="btn-decline" href="/donor/promise/decline/{{ p[0] }}">Decline</a>
+        </div>
+        {% endfor %} {% else %}
+        <p>No pending promises.</p>
+        {% endif %}
+    </div>
+
+</body>
+
+</html>

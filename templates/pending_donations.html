@@ -1,0 +1,131 @@
+{% extends "base.html" %} {% block content %}
+
+<style>
+    .pending-wrapper {
+        max-width: 900px;
+        margin: 40px auto;
+        color: #1e3f2e;
+        font-family: "Poppins", sans-serif;
+    }
+    
+    h1 {
+        margin-bottom: 8px;
+        font-size: 26px;
+        color: #2e8f55;
+        text-align: center;
+    }
+    
+    .subtitle {
+        text-align: center;
+        color: #6f8f7c;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.07);
+    }
+    
+    th {
+        background: #2e8f55;
+        color: white;
+        padding: 12px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+    
+    td {
+        padding: 14px;
+        text-align: center;
+        border-bottom: 1px solid #e8efe9;
+        font-size: 14px;
+    }
+    
+    tr:last-child td {
+        border-bottom: none;
+    }
+    
+    .confirm-btn {
+        background: #2e8f55;
+        border: none;
+        padding: 8px 16px;
+        color: white;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: 0.2s ease;
+    }
+    
+    .confirm-btn:hover {
+        background: #256c42;
+    }
+    /* Back Button */
+    
+    .back-btn {
+        display: block;
+        width: fit-content;
+        margin: 28px auto 0;
+        padding: 10px 20px;
+        background: #2e8f55;
+        color: white;
+        text-decoration: none;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 14px;
+        transition: 0.2s ease;
+    }
+    
+    .back-btn:hover {
+        background: #256c42;
+    }
+</style>
+
+
+<div class="pending-wrapper">
+
+    <h1>Pending Donations</h1>
+    <p class="subtitle">Review pending donations below.</p>
+
+    {% if pending %}
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Qty</th>
+            <th>Urgency</th>
+            <th>Remaining Need</th>
+            <th>Date</th>
+            <th>Confirm</th>
+        </tr>
+
+        {% for d in pending %}
+        <tr>
+            <td>{{ d[2] }}</td>
+            <td>{{ d[3] }}</td>
+            <td>{{ d[4] }}</td>
+            <td>{{ d[5] }}</td>
+            <td>{{ d[6] }}</td>
+            <td>
+                <form action="/confirm_donation/{{ d[0] }}" method="POST">
+                    <button class="confirm-btn">Confirm</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% else %}
+    <p style="text-align:center; color:#7a8b80; font-size:14px;">
+        No pending donations yet.
+    </p>
+    {% endif %}
+
+    <a href="/account_donor" class="back-btn">← Back to Dashboard</a>
+
+</div>
+
+{% endblock %}
