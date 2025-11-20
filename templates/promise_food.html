@@ -1,0 +1,132 @@
+{% extends "base.html" %} {% block content %}
+
+<style>
+    .wrapper {
+        max-width: 520px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 35px 32px;
+        border-radius: 22px;
+        box-shadow: 0 8px 26px rgba(0, 0, 0, 0.08);
+        color: #1e3f2e;
+    }
+    
+    h2 {
+        margin: 0 0 6px;
+        color: #2e8f55;
+        font-size: 26px;
+        text-align: center;
+    }
+    
+    .subtitle {
+        color: #6f8f7c;
+        text-align: center;
+        font-size: 14px;
+        margin-bottom: 22px;
+    }
+    
+    .info-box {
+        background: #f9fdf9;
+        padding: 18px 20px;
+        border-radius: 16px;
+        border: 1px solid #dceade;
+        margin-bottom: 22px;
+    }
+    
+    .info-row {
+        margin-bottom: 10px;
+        font-size: 15px;
+        color: #466d53;
+    }
+    
+    .info-row strong {
+        color: #2e8f55;
+    }
+    
+    label {
+        font-size: 15px;
+        color: #2e8f55;
+        font-weight: 600;
+    }
+    
+    input[type="number"] {
+        width: 100%;
+        padding: 14px;
+        border-radius: 14px;
+        border: 1px solid #d8e8dc;
+        background: #f9fdf9;
+        margin-top: 8px;
+        font-size: 15px;
+    }
+    
+    button {
+        margin-top: 26px;
+        width: 100%;
+        padding: 14px;
+        font-size: 16px;
+        font-weight: 600;
+        color: white;
+        background: #2e8f55;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+    }
+    
+    .back {
+        display: block;
+        text-align: center;
+        margin-top: 18px;
+        text-decoration: none;
+        color: #2b6e43;
+        font-size: 14px;
+        font-weight: 500;
+    }
+</style>
+
+<div class="wrapper">
+
+    <h2>Promise to Donate</h2>
+    <p class="subtitle">Your support makes a real difference 💚</p>
+
+    <div class="info-box">
+        <div class="info-row"><strong>Item:</strong> {{ item_name }}</div>
+
+        {% if description %}
+        <div class="info-row"><strong>Description:</strong> {{ description }}</div>
+        {% endif %}
+
+        <div class="info-row"><strong>Urgency:</strong> {{ urgency }}</div>
+
+        <div class="info-row"><strong>Needed:</strong> {{ quantity }} items</div>
+    </div>
+
+    <form action="{{ url_for('submit_food_promise') }}" method="POST">
+
+        <!-- Hidden Data -->
+        <input type="hidden" name="donor_id" value="{{ donor_id }}">
+        <input type="hidden" name="item_name" value="{{ item_name }}">
+        <input type="hidden" name="urgency" value="{{ urgency }}">
+        <input type="hidden" name="remaining_need" value="{{ quantity }}"> {% if quantity > 0 %}
+        <label>How many items can you bring?</label>
+        <input type="number" name="user_quantity" min="1" max="{{ quantity }}" required>
+
+        <button type="submit">Confirm Promise</button> {% else %}
+        <div style="
+                background:#ffecec;
+                border:1px solid #ffb3b3;
+                color:#b83232;
+                padding:14px 16px;
+                border-radius:14px;
+                text-align:center;
+                margin-bottom:18px;
+                font-weight:600;">
+            This item is no longer needed. Thank you 🤍
+        </div>
+        {% endif %}
+    </form>
+
+    <a href="{{ url_for('donate_food') }}" class="back">← Back to items</a>
+
+</div>
+
+{% endblock %}

@@ -4,243 +4,575 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Changed Title -->
-    <title>My Donor Account | 4 Elements</title>
+    <title>Food Bank Dashboard | 4 Elements</title>
 
     <!-- Fonts & Icons -->
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
-    <!-- Copied all styles from account.html to ensure identical appearance -->
     <style>
-        :root {
-            --main-green: #33cc73;
-            --dark-green: #1f5c3f;
-            --light-bg: #f8fdf9;
-            --gray: #666;
-            --card-radius: 18px;
+         :root {
+            --gold: #d4af37;
+            --black: #0d0d0d;
+            --card-black: #141414;
+            --gray: #bfbfbf;
+            --radius: 18px;
         }
-        * { box-sizing: border-box; }
-        body { font-family: "Poppins", sans-serif; background: var(--light-bg); color: #1f1f1f; margin: 0; padding: 0; }
-        header { background: #fff; padding: 18px 8%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); position: sticky; top: 0; z-index: 50; }
-        .logo { display: flex; align-items: center; font-weight: 700; color: var(--dark-green); font-size: 22px; }
-        .logo i { color: var(--main-green); margin-right: 8px; }
-        .nav-links a { margin: 0 15px; text-decoration: none; color: var(--dark-green); font-weight: 500; transition: color 0.3s; }
-        .nav-links a:hover { color: var(--main-green); }
-        .header-actions { display: flex; gap: 10px; align-items: center; }
-        .logout-btn, .delete-header-btn { padding: 8px 20px; border-radius: 25px; text-decoration: none; font-weight: 600; border: 2px solid transparent; transition: 0.25s ease; font-size: 0.9rem; }
-        .logout-btn { background: var(--main-green); color: #fff; }
-        .logout-btn:hover { background: var(--dark-green); }
-        .delete-header-btn { background: #fff; color: #e53935; border-color: #ffcdd2; }
-        .delete-header-btn:hover { background: #ffebee; }
-        main { padding: 40px 6% 60px; }
-        .profile-container { max-width: 1100px; margin: 0 auto 40px; background: #fff; border-radius: 20px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06); padding: 40px 50px; display: flex; align-items: center; justify-content: space-between; gap: 40px; animation: fadeUp 0.7s ease; }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
-        .profile-info { flex: 1.2; }
-        .profile-info h1 { color: var(--dark-green); font-size: 2rem; margin-bottom: 8px; }
-        .profile-info p { color: var(--gray); font-size: 0.98rem; line-height: 1.6; }
-        .profile-card { flex: 1; background: linear-gradient(135deg, var(--main-green), var(--dark-green)); border-radius: 18px; padding: 40px 30px; color: #fff; text-align: center; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18); transition: transform 0.3s ease, box-shadow 0.3s ease; }
-        .profile-card:hover { transform: translateY(-6px); box-shadow: 0 16px 35px rgba(0, 0, 0, 0.25); }
-        .profile-card i { font-size: 3rem; margin-bottom: 15px; }
-        .profile-card h2 { margin-bottom: 5px; font-weight: 600; }
-        .profile-card span { font-size: 0.95rem; opacity: 0.9; }
-        .actions { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 25px; }
-        .actions a { padding: 10px 26px; border-radius: 25px; font-weight: 600; text-decoration: none; transition: 0.25s ease; font-size: 0.9rem; }
-        .edit-btn { background: #fff; color: var(--main-green); border: 2px solid var(--main-green); }
-        .edit-btn:hover { background: var(--main-green); color: #fff; }
-        .change-pass { background: var(--main-green); color: #fff; }
-        .change-pass:hover { background: var(--dark-green); }
-        .dashboard-wrapper { max-width: 1100px; margin: 0 auto; background: #fff; border-radius: 20px; padding: 35px 40px 40px; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05); animation: fadeUp 0.7s ease 0.05s backwards; }
-        .dashboard-header { text-align: center; margin-bottom: 25px; }
-        .dashboard-header h2 { margin: 0; font-size: 1.6rem; color: var(--dark-green); }
-        .dashboard-header p { margin-top: 6px; color: var(--gray); font-size: 0.95rem; }
-        .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-bottom: 25px; }
-        .stat-card { border-radius: var(--card-radius); padding: 18px 20px; color: #fff; display: flex; flex-direction: column; justify-content: space-between; min-height: 120px; position: relative; overflow: hidden; cursor: pointer; transform: translateY(0); transition: transform 0.35s ease, box-shadow 0.35s ease, transform 0.2s ease-out; }
-        .stat-card::after { content: ""; position: absolute; right: -10px; bottom: -20px; width: 80px; height: 80px; background: rgba(255, 255, 255, 0.18); border-radius: 50%; filter: blur(3px); }
-        .stat-card:hover { transform: translateY(-6px) scale(1.01); box-shadow: 0 18px 35px rgba(0, 0, 0, 0.25); }
-        .stat-icon { font-size: 1.3rem; margin-bottom: 10px; }
-        .stat-value { font-size: 1.7rem; font-weight: 700; }
-        .stat-label { font-size: 0.9rem; opacity: 0.94; }
-        .stat-sub { font-size: 0.78rem; opacity: 0.9; }
-        .stat-1 { background: linear-gradient(135deg, #1abc9c, #16a085); }
-        .stat-2 { background: linear-gradient(135deg, #00c6ff, #0072ff); }
-        .stat-3 { background: linear-gradient(135deg, #00b09b, #96c93d); }
-        .stat-4 { background: linear-gradient(135deg, #f7971e, #ffd200); color: #14401b; }
-        .dashboard-main { display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; }
-        .card-panel { background: #f9fdfb; border-radius: 18px; padding: 20px 22px; border: 1px solid #edf5ef; box-shadow: 0 8px 18px rgba(0, 0, 0, 0.03); }
-        .panel-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-        .panel-header i { color: var(--main-green); }
-        .panel-header h3 { margin: 0; font-size: 1rem; color: var(--dark-green); }
-        .panel-header span { font-size: 0.82rem; color: var(--gray); }
-        .activity-list { margin: 0; padding: 0; list-style: none; }
-        .activity-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; border-radius: 12px; background: #ffffff; margin-bottom: 8px; transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease; cursor: pointer; }
-        .activity-item:hover { background: #f2fbf6; transform: translateY(-2px); box-shadow: 0 8px 15px rgba(0, 0, 0, 0.04); }
-        .activity-main { display: flex; align-items: center; gap: 10px; }
-        .activity-icon { width: 32px; height: 32px; border-radius: 50%; background: rgba(51, 204, 115, 0.12); display: flex; align-items: center; justify-content: center; color: var(--main-green); }
-        .activity-title { font-size: 0.9rem; font-weight: 500; }
-        .activity-time { font-size: 0.8rem; color: var(--gray); }
-        .chart-placeholder { border-radius: 16px; background: #f3fbf6; border: 1px dashed #c6e9d6; height: 210px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 8px; }
-        .chart-badge { width: 45px; height: 45px; border-radius: 50%; background: #e1f7eb; display: flex; align-items: center; justify-content: center; color: var(--main-green); margin-bottom: 5px; }
-        .chart-title { font-weight: 600; font-size: 0.98rem; color: var(--dark-green); }
-        .chart-text { font-size: 0.82rem; color: var(--gray); max-width: 260px; }
-        .chart-pill { background: #ffffff; border-radius: 999px; padding: 5px 14px; border: 1px solid #dcefe3; font-size: 0.78rem; margin-top: 4px; }
-        footer { text-align: center; color: #777; padding: 22px 0 10px; font-size: 0.9rem; }
-        @media (max-width: 960px) { .profile-container { flex-direction: column; padding: 30px 25px; } .dashboard-main { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-        @media (max-width: 640px) { header { padding: 14px 16px; } .nav-links { display: none; } main { padding: 25px 12px 40px; } .stats-grid { grid-template-columns: 1fr; } }
+        
+        body {
+            font-family: "Poppins", sans-serif;
+            margin: 0;
+            background: var(--black);
+            color: var(--gray);
+        }
+        /* HEADER */
+        
+        header {
+            background: #000;
+            padding: 18px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .logo i {
+            color: var(--gold);
+        }
+        
+        .nav-links a {
+            color: var(--gray);
+            margin: 0 16px;
+            text-decoration: none;
+            transition: 0.3s;
+            font-size: 0.95rem;
+        }
+        
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+        
+        .header-actions a {
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .header-actions a:hover {
+            background: var(--gold);
+            color: #000;
+        }
+        
+        main {
+            padding: 45px 6% 70px;
+        }
+        /* PROFILE CARD */
+        
+        .profile-container {
+            max-width: 1100px;
+            margin: 0 auto 40px;
+            background: var(--card-black);
+            padding: 40px 50px;
+            border-radius: var(--radius);
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+            border: 1px solid rgba(212, 175, 55, 0.18);
+        }
+        
+        .profile-info h1 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            color: var(--gold);
+        }
+        
+        .profile-info p {
+            opacity: 0.8;
+            font-size: 0.95rem;
+        }
+        
+        .profile-meta {
+            margin-top: 12px;
+            font-size: 0.9rem;
+            color: #9ca3af;
+        }
+        
+        .actions {
+            margin-top: 18px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .actions a {
+            display: inline-block;
+            padding: 9px 20px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            transition: 0.3s;
+            font-size: 0.86rem;
+        }
+        
+        .actions a:hover {
+            background: var(--gold);
+            color: #000;
+        }
+        
+        .profile-card {
+            width: 320px;
+            background: radial-gradient(circle at top, rgba(212, 175, 55, 0.22), #050505);
+            padding: 34px 26px;
+            border-radius: var(--radius);
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            box-shadow: 0 0 22px rgba(212, 175, 55, 0.15);
+        }
+        
+        .profile-card i {
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 12px;
+        }
+        
+        .profile-card h2 {
+            margin: 8px 0;
+            color: var(--gold);
+            font-size: 1.3rem;
+        }
+        
+        .profile-card span {
+            display: block;
+            margin-top: 6px;
+            font-size: 0.85rem;
+            color: #9ca3af;
+        }
+        
+        .badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 16px;
+            padding: 8px 16px;
+            border-radius: 999px;
+            background: rgba(212, 175, 55, 0.12);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            font-size: 0.85rem;
+            color: var(--gold);
+        }
+        
+        .badge-pill .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+        }
+        
+        .badge-pill .pending {
+            background: #f97316;
+        }
+        /* DASHBOARD WRAPPER */
+        
+        .dashboard-wrapper {
+            max-width: 1100px;
+            margin: 0 auto 40px;
+        }
+        
+        .dashboard-header {
+            margin-bottom: 22px;
+        }
+        
+        .dashboard-header h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            color: var(--gold);
+        }
+        
+        .dashboard-header p {
+            margin: 6px 0 0;
+            font-size: 0.9rem;
+            color: #9ca3af;
+        }
+        /* STATS SECTION */
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: rgba(15, 23, 42, 0.95);
+            border-radius: 18px;
+            padding: 18px 18px 16px;
+            border: 1px solid rgba(148, 163, 184, 0.22);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            margin-bottom: 6px;
+        }
+        
+        .stat-value {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #e5e7eb;
+        }
+        
+        .stat-foot {
+            margin-top: 8px;
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+        /* MAIN GRID */
+        
+        .dashboard-main {
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr);
+            gap: 20px;
+        }
+        
+        .card-panel {
+            background: rgba(15, 23, 42, 0.96);
+            border-radius: 18px;
+            padding: 20px 18px 18px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+        }
+        
+        .panel-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        
+        .panel-header h3 {
+            margin: 0;
+            font-size: 1rem;
+            color: #e5e7eb;
+        }
+        
+        .panel-header i {
+            font-size: 1rem;
+            color: var(--gold);
+        }
+        /* ACTIVITY LIST */
+        
+        .activity-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            max-height: 260px;
+            overflow-y: auto;
+        }
+        
+        .activity-item {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(55, 65, 81, 0.8);
+            font-size: 0.85rem;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-time {
+            display: block;
+            margin-top: 4px;
+            font-size: 0.75rem;
+            color: #9ca3af;
+        }
+        /* MANAGEMENT */
+        
+        .management-card {
+            margin-top: 16px;
+            background: radial-gradient(circle at top left, rgba(212, 175, 55, 0.2), rgba(15, 23, 42, 0.98));
+        }
+        
+        .manage-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .manage-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 16px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-decoration: none;
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            color: #e5e7eb;
+            background: rgba(15, 23, 42, 0.9);
+            transition: 0.25s ease;
+        }
+        
+        .manage-btn span {
+            font-size: 1rem;
+        }
+        
+        .manage-btn:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            transform: translateY(-1px);
+        }
+        /* RIGHT SIDE */
+        
+        .chart-placeholder {
+            border-radius: 14px;
+            border: 1px dashed rgba(156, 163, 175, 0.6);
+            padding: 20px 16px;
+            text-align: center;
+            font-size: 0.88rem;
+            color: #9ca3af;
+            margin-top: 8px;
+        }
+        
+        .pill-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+            font-size: 0.8rem;
+        }
+        
+        .pill {
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(31, 41, 55, 0.9);
+            border: 1px solid rgba(75, 85, 99, 0.9);
+            color: #9ca3af;
+        }
+        
+        footer {
+            padding: 18px 0 26px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #6b7280;
+            border-top: 1px solid rgba(31, 41, 55, 0.9);
+            background: #020617;
+        }
+        
+        @media (max-width: 960px) {
+            .profile-container {
+                flex-direction: column;
+            }
+            .dashboard-main {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
     </style>
 </head>
 
 <body>
+
     <header>
-        <div class="logo">
-            <i class="fa-solid fa-hand-holding-heart"></i> 4 Elements
-        </div>
+        <div class="logo"><i class="fa-solid fa-crown"></i> 4 Elements</div>
 
         <div class="nav-links">
             <a href="{{ url_for('home') }}">Home</a>
-            <a href="#projects">Projects</a>
+            <a href="{{ url_for('projects') }}">Projects</a>
             <a href="{{ url_for('about') }}">About</a>
         </div>
 
         <div class="header-actions">
-            <a href="{{ url_for('delete_account_page') }}" class="delete-header-btn">Delete Account</a>
-            <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+            <a href="{{ url_for('delete_account_page') }}">Delete</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
         </div>
     </header>
 
     <main>
-        <!-- PROFILE CARD -->
+
+        <!-- PROFILE HEADER -->
         <section class="profile-container">
             <div class="profile-info">
-                <!-- Donor-specific welcome message -->
-                <h1>Welcome, {{ food_bank_name }} 🏦</h1>
-                <p>
-                    You are logged in as a Food Bank Partner. Here you can manage incoming donations,
-                    post new requests for items, and see your impact on the community.
-                </p>
+                <h1>Welcome back, {{ food_bank_name }} 👑</h1>
+                <p>Your organization’s generosity is shaping a stronger community.</p>
+
+                <div class="profile-meta">
+                    <div><i class="fa-solid fa-location-dot"></i> {{ address }}</div>
+                    <div style="margin-top:4px;">
+                        <i class="fa-solid fa-user"></i> Managed by: {{ name }}
+                    </div>
+                </div>
 
                 <div class="actions">
-                    <!-- Donor-specific actions -->
-                    <a href="#" class="change-pass">Post Needed Items</a>
-                    <a href="#" class="edit-btn">Manage Food Bank Info</a>
+                    <a href="{{ url_for('pending_promises') }}">
+                        View Pending Donations
+                    </a>
+                    <a href="{{ url_for('confirmed_donations') }}">
+                        Confirmed Donations
+                    </a>
                 </div>
             </div>
 
             <div class="profile-card">
-                <i class="fa-solid fa-landmark"></i>
-                <h2>{{ name }}</h2>
-                <!-- Changed role description -->
-                <span>Food Bank Partner</span>
+                <i class="fa-solid fa-warehouse"></i>
+                <h2>{{ food_bank_name }}</h2>
+                <span>{{ address }}</span> {% if pending_count and pending_count > 0 %}
+                <div class="badge-pill">
+                    <span class="dot pending"></span> {{ pending_count }} pending donation{{ 's' if pending_count > 1 else '' }}
+                </div>
+                {% else %}
+                <div class="badge-pill">
+                    <span class="dot"></span> All caught up — no pending donations
+                </div>
+                {% endif %}
             </div>
         </section>
 
-        <!-- DASHBOARD -->
+        <!-- DASHBOARD WRAPPER -->
         <section class="dashboard-wrapper">
+
             <div class="dashboard-header">
-                <!-- Changed dashboard title -->
-                <h2>Your Food Bank Dashboard 📊</h2>
-                <p>Track incoming donations and community engagement.</p>
+                <h2>Your Royal Impact ⚜️</h2>
+                <p>At a glance: how your food bank is serving the community.</p>
             </div>
 
-            <!-- Top stats - Changed to be donor-relevant -->
+            <!-- STATS SECTION -->
             <div class="stats-grid">
-                <div class="stat-card stat-1">
-                    <div class="stat-icon">
-                        <i class="fa-solid fa-box-open"></i>
-                    </div>
-                    <div class="stat-value">{{ food_received }}</div>
-                    <div class="stat-label">Food Received</div>
-                    <div class="stat-sub">total items</div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Food Donations Received</div>
+                    <div class="stat-value">{{ food_donations }}</div>
+                    <div class="stat-foot">Items contributed to your stock</div>
                 </div>
 
-                <div class="stat-card stat-2">
-                    <div class="stat-icon">
-                        <i class="fa-solid fa-bullhorn"></i>
-                    </div>
-                    <div class="stat-value">{{ active_requests }}</div>
-                    <div class="stat-label">Active Requests</div>
-                    <div class="stat-sub">items needed</div>
+                <div class="stat-card">
+                    <div class="stat-label">Money Received</div>
+                    <div class="stat-value">€{{ '%.2f' % money_donated }}</div>
+                    <div class="stat-foot">Financial support from donors</div>
                 </div>
 
-                <div class="stat-card stat-3">
-                    <div class="stat-icon">
-                        <i class="fa-solid fa-users"></i>
-                    </div>
-                    <div class="stat-value">{{ donors_connected }}</div>
-                    <div class="stat-label">Donors Connected</div>
-                    <div class="stat-sub">community members</div>
+                <div class="stat-card">
+                    <div class="stat-label">Volunteer Hours</div>
+                    <div class="stat-value">{{ volunteer_hours }}</div>
+                    <div class="stat-foot">Hours of time donated</div>
                 </div>
 
-                <div class="stat-card stat-4">
-                    <div class="stat-icon">
-                        <i class="fa-solid fa-handshake-angle"></i>
-                    </div>
-                    <div class="stat-value">{{ volunteers_managed }}</div>
-                    <div class="stat-label">Volunteers</div>
-                    <div class="stat-sub">people helping</div>
+                <div class="stat-card">
+                    <div class="stat-label">Impact Points</div>
+                    <div class="stat-value">{{ points }}</div>
+                    <div class="stat-foot">Internal metric for your impact</div>
                 </div>
+
             </div>
 
-            <!-- Bottom panels -->
+            <!-- MAIN LAYOUT -->
             <div class="dashboard-main">
-                <!-- Recent Activity - Changed to show incoming donations -->
-                <div class="card-panel">
-                    <div class="panel-header">
-                        <i class="fa-regular fa-calendar-check"></i>
-                        <div>
-                            <h3>Recent Incoming Donations</h3>
-                            <span>Latest items received</span>
+
+                <!-- LEFT SIDE -->
+                <div>
+                    <!-- Management -->
+                    <div class="card-panel management-card">
+                        <div class="panel-header">
+                            <i class="fa-solid fa-gears"></i>
+                            <h3>Management Actions</h3>
+                        </div>
+                        <p style="font-size:0.86rem; color:#cbd5f5; margin-bottom:6px;">
+                            Quickly manage your public requests and volunteer needs.
+                        </p>
+
+                        <div class="manage-buttons">
+                            <a href="{{ url_for('request_items_page') }}" class="manage-btn">
+                                <span>📦</span> Request Food Items
+                            </a>
+
+                            <a href="{{ url_for('request_volunteers_page') }}" class="manage-btn">
+                                <span>🤝</span> Request Volunteers
+                            </a>
+
+                            <a href="{{ url_for('organization_requests') }}" class="manage-btn">
+                                <span>📋</span> View Volunteer Requests
+                            </a>
                         </div>
                     </div>
 
-                    <ul class="activity-list">
-                        {% for item, time in donor_activity %}
-                        <li class="activity-item">
-                            <div class="activity-main">
-                                <div class="activity-icon">
-                                    <i class="fa-solid fa-gift"></i>
-                                </div>
-                                <div>
-                                    <div class="activity-title">{{ item }}</div>
-                                    <div class="activity-time">{{ time }}</div>
-                                </div>
-                            </div>
-                        </li>
-                        {% endfor %}
-                    </ul>
+                    <!-- Recent Activity -->
+                    <div class="card-panel" style="margin-top:16px;">
+                        <div class="panel-header">
+                            <i class="fa-regular fa-calendar-check"></i>
+                            <h3>Recent Activity</h3>
+                        </div>
+
+                        {% if activity %}
+                        <ul class="activity-list">
+                            {% for desc, ts in activity %}
+                            <li class="activity-item">
+                                <span>{{ desc }}</span>
+                                <span class="activity-time">
+                                    <i class="fa-regular fa-clock"></i> {{ ts }}
+                                </span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p style="font-size:0.85rem; color:#9ca3af; margin-top:4px;">
+                            No activity yet. Once donations start flowing in, you’ll see them here.
+                        </p>
+                        {% endif %}
+                    </div>
                 </div>
 
-                <!-- Chart placeholder - Changed text to be donor-relevant -->
+                <!-- RIGHT SIDE -->
                 <div class="card-panel">
                     <div class="panel-header">
                         <i class="fa-solid fa-chart-line"></i>
-                        <div>
-                            <h3>Donation Trends</h3>
-                            <span>Charts coming soon</span>
-                        </div>
+                        <h3>Impact Overview</h3>
                     </div>
 
+                    <p style="font-size:0.86rem; color:#9ca3af; margin-bottom:8px;">
+                        Soon, this space will turn into visual charts showing how donations evolve over time.
+                    </p>
+
                     <div class="chart-placeholder">
-                        <div class="chart-badge">
-                            <i class="fa-solid fa-arrow-trend-up"></i>
-                        </div>
-                        <div class="chart-title">Future Chart Area</div>
-                        <div class="chart-text">
-                            This area will visualize your incoming donations by category and show you
-                            trends over time.
-                        </div>
-                        <div class="chart-pill">Placeholder for charts</div>
+                        Charts coming soon…
+                        <br>Money • Food • Volunteer Hours
+                    </div>
+
+                    <div class="pill-row">
+                        <div class="pill">Focused on transparency</div>
+                        <div class="pill">Designed for coordination</div>
+                        <div class="pill">Optimized for real impact</div>
                     </div>
                 </div>
+
             </div>
+
         </section>
     </main>
 
     <footer>
-        © 2025 4 Elements — Building kindness together.
+        © 2025 4 Elements — Empowering food banks with smart donations.
     </footer>
+
 </body>
+
 </html>

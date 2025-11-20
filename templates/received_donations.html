@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Received Donations | 4Elements</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
+    <style>
+        body {
+            background: #f4faf6;
+            font-family: "Poppins", sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container-dash {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 28px 30px 32px;
+            border-radius: 24px;
+            box-shadow: 0 10px 35px rgba(15, 23, 42, 0.13);
+            animation: fadeIn 0.7s ease;
+        }
+        
+        h2 {
+            font-size: 24px;
+            color: #204233;
+            margin: 0 0 6px;
+        }
+        
+        .subtitle {
+            font-size: 13px;
+            color: #7a8b80;
+            margin-bottom: 20px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
+            font-size: 13px;
+        }
+        
+        thead {
+            background: var(--main-green);
+            color: #ffffff;
+        }
+        
+        th,
+        td {
+            padding: 10px 12px;
+            text-align: left;
+        }
+        
+        th {
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        
+        tbody tr:nth-child(even) {
+            background: #f6fbf7;
+        }
+        
+        tbody tr:hover {
+            background: #edf7f0;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-dash">
+        <h2>Received Donations</h2>
+        <p class="subtitle">Here you can see all contributions made to your organization.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Donor Email</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Quantity</th>
+                    <th>Hours</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for d in donations %}
+                <tr>
+                    <td>{{ d[0] }}</td>
+                    <td>{{ d[1] }}</td>
+                    <td>{{ d[2] if d[2] else "-" }}</td>
+                    <td>{{ d[3] if d[3] else "-" }}</td>
+                    <td>{{ d[4] if d[4] else "-" }}</td>
+                    <td>{{ d[5] }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" style="text-align:center; padding:14px; color:#7a8b80;">
+                        No donations received yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>

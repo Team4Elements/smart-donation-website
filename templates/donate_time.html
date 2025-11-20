@@ -1,77 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Volunteer Your Time</title>
+    <title>Donate Time | 4Elements</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
     <style>
-        body { background: #f7f7f7; }
-        .content-wrapper { max-width: 900px; margin: 50px auto; padding: 40px; background: #fff; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
-        h1 { color: var(--dark-green); text-align: center; margin-bottom: 30px; }
-        .role-card { background: #f9f9f9; border-radius: 10px; padding: 20px; margin-bottom: 20px; }
-        .role-card h3 { color: var(--dark-green); }
-        .flash { padding: 15px; margin-bottom: 20px; border-radius: 8px; text-align: center; }
-        .flash.success { background: #c6f7d0; color: #104d27; }
-        .flash.error { background: #ffd1cc; color: #8b1a05; }
-
-        /* ✅ START: LOCAL BUTTON STYLES */
-        .btn {
-            padding: 10px 28px;
-            border-radius: 30px;
-            font-size: 1rem;
+        body {
+            background: #f4faf6;
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", sans-serif;
+        }
+        
+        .wrapper {
+            max-width: 950px;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 24px;
+        }
+        
+        .card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 26px 24px 28px;
+            box-shadow: 0 12px 35px rgba(15, 23, 42, 0.12);
+            animation: fadeIn 0.7s ease;
+        }
+        
+        h2 {
+            margin: 0 0 6px;
+            font-size: 24px;
+            color: #214f3a;
+        }
+        
+        p {
+            margin: 0 0 18px;
+            font-size: 13px;
+            color: #738679;
+        }
+        
+        label {
+            display: block;
+            font-size: 13px;
             font-weight: 600;
-            text-decoration: none;
-            transition: 0.3s ease;
-            display: inline-block;
+            color: #244e3b;
+            margin-top: 14px;
         }
-        .btn.primary {
-            background-color: var(--main-green);
+        
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 6px;
+            border-radius: 10px;
+            border: 1px solid #d7e6db;
+            background: #f9fdf9;
+            font-size: 14px;
+            transition: 0.25s;
+        }
+        
+        input:focus,
+        select:focus {
+            border-color: var(--main-green);
+            box-shadow: 0 0 6px rgba(0, 140, 80, 0.15);
+            outline: none;
+        }
+        
+        button {
+            margin-top: 22px;
+            padding: 12px 20px;
+            border-radius: 999px;
+            border: none;
+            background: var(--main-green);
             color: #fff;
-            padding: 12px 35px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.25s;
         }
-        .btn.primary:hover {
-            background-color: var(--dark-green);
-            transform: scale(1.05);
-        }
-        .btn.secondary {
-            background: transparent;
-            border: 2px solid var(--dark-green);
-            color: var(--dark-green);
-            padding: 10px 33px; /* Match height */
-        }
-        .btn.secondary:hover {
+        
+        button:hover {
             background: var(--dark-green);
-            color: #fff;
-            transform: scale(1.05);
+            transform: translateY(-2px);
         }
-        /* ✅ END: LOCAL BUTTON STYLES */
+        
+        .role-list h3 {
+            margin: 0 0 10px;
+            font-size: 18px;
+            color: #214f3a;
+        }
+        
+        .role-item {
+            padding: 12px 0;
+            border-bottom: 1px dashed #dce7df;
+        }
+        
+        .role-item:last-child {
+            border-bottom: none;
+        }
+        
+        .role-title {
+            font-weight: 700;
+            font-size: 15px;
+            color: #214f3a;
+        }
+        
+        .role-details {
+            margin-top: 4px;
+            font-size: 12px;
+            color: #52655b;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
-<body>
-    <div class="content-wrapper">
-        <h1>Available Volunteer Roles</h1>
-        
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="flash {{ category }}">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-        {% endwith %}
 
-        {% for role in roles %}
-        <div class="role-card">
-            <h3>{{ role[1] }}</h3>
-            <p>{{ role[2] }}</p>
+<body>
+
+    <div class="wrapper">
+
+        <!-- LEFT — FORM -->
+        <div class="card">
+            <h2>Donate Your Time</h2>
+            <p>Select a task and choose when you are available.</p>
+
+            <form action="{{ url_for('volunteer_signup') }}" method="GET">
+
+                <label>Select Task</label>
+                <select name="role_id" required>
+                    {% for r in roles %}
+                        <option value="{{ r[0] }}">{{ r[1] }} — Needs {{ r[3] }} people</option>
+                    {% endfor %}
+                </select>
+
+                <label>Preferred Day</label>
+                <input type="date" name="day" required>
+
+                <label>Preferred Time</label>
+                <input type="time" name="time" required>
+
+                <button type="submit">Continue to Sign Up</button>
+            </form>
         </div>
-        {% else %}
-        <p>There are currently no open volunteer roles. Please check back later!</p>
-        {% endfor %}
-        
-        <div style="text-align: center; margin-top: 30px; display: flex; justify-content: center; gap: 15px;">
-            <a href="{{ url_for('volunteer_signup') }}" class="btn primary">Sign Up Now</a>
-            <a href="{{ url_for('contribution') }}" class="btn secondary">Back to Choices</a>
+
+        <!-- RIGHT — AVAILABLE TASKS -->
+        <div class="card role-list">
+            <h3>Available Volunteer Tasks</h3>
+
+            {% if roles %} {% for r in roles %}
+            <div class="role-item">
+                <div class="role-title">{{ r[1] }}</div>
+
+                <div class="role-details">
+                    <p>{{ r[2] }}</p>
+                    <p>👥 Needed: {{ r[3] }}</p>
+                    <p>📅 Date: {{ r[4] }}</p>
+                    <p>⏳ Duration: {{ r[5] }}</p>
+                </div>
+            </div>
+            {% endfor %} {% else %}
+            <p>No volunteer tasks available at the moment.</p>
+            {% endif %}
         </div>
+
     </div>
+
 </body>
+
 </html>

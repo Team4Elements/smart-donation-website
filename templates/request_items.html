@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Request Food Items | 4 Elements</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f4faf6;
+            font-family: "Poppins", sans-serif;
+            margin: 0;
+            padding: 40px 0;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .request-wrapper {
+            width: 520px;
+            background: #ffffff;
+            padding: 35px 32px;
+            border-radius: 24px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            animation: fadeIn 0.6s ease;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h2 {
+            margin: 0;
+            text-align: center;
+            color: #2e8f55;
+            font-size: 26px;
+            font-weight: 700;
+        }
+        
+        p {
+            text-align: center;
+            color: #6b8f7a;
+            font-size: 14px;
+            margin-top: 6px;
+            margin-bottom: 24px;
+        }
+        
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 14px;
+            border-radius: 16px;
+            border: 1px solid #d9e7dd;
+            background: #f9fdf9;
+            margin-top: 14px;
+            font-size: 15px;
+            transition: 0.25s;
+        }
+        
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #2e8f55;
+            box-shadow: 0 0 8px rgba(46, 143, 85, 0.25);
+            outline: none;
+        }
+        
+        textarea {
+            height: 110px;
+            resize: none;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            margin-top: 24px;
+            padding: 14px;
+            background: #2e8f55;
+            border: none;
+            border-radius: 30px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+        
+        .submit-btn:hover {
+            background: #256c44;
+        }
+        
+        .back-btn {
+            display: block;
+            margin-top: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: #2e8f55;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="request-wrapper">
+        <h2>Request Food Items</h2>
+        <p>Submit the items your organization currently needs.</p>
+
+        <form action="{{ url_for('submit_request_item') }}" method="POST">
+
+            <input type="text" name="item_name" placeholder="Item Name" required>
+
+            <textarea name="description" placeholder="Description (optional)"></textarea>
+
+            <input type="number" name="quantity" placeholder="Quantity Needed" required>
+
+            <select name="urgency">
+                <option value="low">Low Urgency</option>
+                <option value="medium" selected>Medium Urgency</option>
+                <option value="high">High Urgency</option>
+                <option value="critical">Critical Need</option>
+            </select>
+
+            <button type="submit" class="submit-btn">Submit Request</button>
+
+            <a href="{{ url_for('account_donor') }}" class="back-btn">← Back to Dashboard</a>
+
+        </form>
+    </div>
+
+</body>
+
+</html>
