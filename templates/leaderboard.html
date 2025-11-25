@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Leaderboard | 4 Elements</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    
+    <style>
+        :root { 
+            --green: #2e8f55; 
+            --gold: #eab308; 
+            --silver: #94a3b8; 
+            --bronze: #b45309; 
+            --platinum: #10b981;
+            --elite: #8b5cf6;
+            --white: #ffffff;
+            --gray-light: #f4f7f6;
+        }
+        
+        body { 
+            margin: 0; 
+            font-family: "Poppins", sans-serif; 
+            background: var(--gray-light); 
+            color: #1e3f2e; 
+        }
+        
+        /* Navbar */
+        nav { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 15px 5%; 
+            background: var(--white); 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
+            position: sticky; 
+            top: 0; 
+            z-index: 100; 
+        }
+        
+        nav .logo { 
+            font-weight: 700; 
+            color: var(--green); 
+            font-size: 1.2rem; 
+            display: flex; 
+            gap: 8px; 
+            align-items: center;
+        }
+        
+        nav a { 
+            text-decoration: none; 
+            color: #555; 
+            margin-left: 20px; 
+            font-weight: 500; 
+        }
+        
+        nav a.active { 
+            color: var(--green); 
+        }
+
+        .leaderboard-container { 
+            max-width: 900px; 
+            margin: 40px auto; 
+            padding: 0 20px; 
+        }
+        
+        .header { 
+            text-align: center; 
+            margin-bottom: 40px; 
+        }
+        
+        .header h1 { 
+            font-size: 2.5rem; 
+            margin-bottom: 10px; 
+            color: var(--green); 
+        }
+        
+        .header p { 
+            color: #666; 
+            font-size: 1.1rem;
+        }
+
+        .lb-card { 
+            background: white; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            overflow: hidden; 
+            margin-bottom: 30px;
+        }
+        
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+        }
+        
+        th { 
+            background: #f8fafc; 
+            padding: 20px; 
+            text-align: left; 
+            font-size: 0.9rem; 
+            color: #64748b; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        td { 
+            padding: 20px; 
+            border-bottom: 1px solid #f1f5f9; 
+        }
+        
+        tr:last-child td { 
+            border-bottom: none; 
+        }
+        
+        tr:hover {
+            background: #f8fafc;
+            transition: background 0.2s ease;
+        }
+        
+        /* Ranks */
+        .rank { 
+            font-weight: 700; 
+            width: 60px; 
+            text-align: center; 
+            font-size: 1.1rem; 
+        }
+        
+        .rank-1 { 
+            color: var(--gold); 
+            font-size: 1.8rem; 
+        }
+        
+        .rank-2 { 
+            color: var(--silver); 
+            font-size: 1.6rem; 
+        }
+        
+        .rank-3 { 
+            color: var(--bronze); 
+            font-size: 1.6rem; 
+        }
+        
+        .user-info { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+        }
+        
+        .avatar { 
+            width: 45px; 
+            height: 45px; 
+            background: #e2e8f0; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: bold; 
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+        
+        .rank-1 .avatar { 
+            background: #fef9c3; 
+            color: var(--gold); 
+            border: 2px solid var(--gold);
+        }
+
+        .rank-2 .avatar {
+            background: #f1f5f9;
+            color: var(--silver);
+            border: 2px solid var(--silver);
+        }
+
+        .rank-3 .avatar {
+            background: #ffedd5;
+            color: var(--bronze);
+            border: 2px solid var(--bronze);
+        }
+        
+        .badge-pill { 
+            padding: 6px 12px; 
+            border-radius: 20px; 
+            font-size: 0.75rem; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+        }
+        
+        .bg-bronze { 
+            background: #ffedd5; 
+            color: #9a3412; 
+        }
+        
+        .bg-silver { 
+            background: #f1f5f9; 
+            color: #475569; 
+        }
+        
+        .bg-gold { 
+            background: #fef9c3; 
+            color: #854d0e; 
+        }
+        
+        .bg-platinum { 
+            background: #e0e7ff; 
+            color: #3730a3; 
+        }
+        
+        .bg-elite { 
+            background: #fae8ff; 
+            color: #86198f; 
+        }
+
+        .points { 
+            font-weight: 700; 
+            color: var(--green); 
+            text-align: right; 
+            font-size: 1.1rem; 
+        }
+
+        .level-badge {
+            font-size: 0.8rem;
+            background: #e5f6eb;
+            color: var(--green);
+            padding: 4px 10px;
+            border-radius: 12px;
+            margin-left: 8px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        /* Badge Legend */
+        .badge-legend {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .badge-legend h3 {
+            margin-top: 0;
+            color: var(--green);
+            text-align: center;
+        }
+
+        .badge-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .current-user-highlight {
+            background: #f0fdf4 !important;
+            border-left: 4px solid var(--green);
+        }
+
+        .your-rank {
+            background: var(--green);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo"><i class="fa-solid fa-trophy"></i> 4 Elements</div>
+        <div>
+            <a href="/">Home</a>
+            <a href="/projects">Projects</a>
+            <a href="/leaderboard" class="active">Leaderboard</a>
+            {% if user %}
+                <a href="{{ url_for('account_donor') if user_type == 'donor' else url_for('account') }}">Dashboard</a>
+            {% else %}
+                <a href="/login_page">Login</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="leaderboard-container">
+        <div class="header">
+            <h1>Community Champions 🏆</h1>
+            <p>See who's making the biggest impact in our community</p>
+        </div>
+
+        <div class="lb-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="rank">Rank</th>
+                        <th>Guardian</th>
+                        <th>Level</th>
+                        <th style="text-align:right">Impact Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if leaders %}
+                        {% for leader in leaders %}
+                        <tr {% if user and leader[0] == user %}class="current-user-highlight"{% endif %}>
+                            <td class="rank">
+                                {% if loop.index == 1 %}
+                                    <i class="fa-solid fa-crown rank-1" title="Gold Champion"></i>
+                                {% elif loop.index == 2 %}
+                                    <span class="rank-2" title="Silver Champion">🥈</span>
+                                {% elif loop.index == 3 %}
+                                    <span class="rank-3" title="Bronze Champion">🥉</span>
+                                {% else %}
+                                    <strong>#{{ loop.index }}</strong>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="user-info">
+                                    <div class="avatar">{{ leader[0][0]|upper }}</div>
+                                    <div>
+                                        <div style="font-weight:600; font-size:1.05rem;">
+                                            {{ leader[0] }}
+                                            {% if user and leader[0] == user %}
+                                                <span class="your-rank">You</span>
+                                            {% endif %}
+                                        </div>
+                                        <span class="badge-pill bg-{{ leader[3] }}">{{ leader[3]|upper }}</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="font-weight:600; color:#64748b;">
+                                Level {{ leader[2] }}
+                                <span class="level-badge">Lvl {{ leader[2] }}</span>
+                            </td>
+                            <td class="points">
+                                {{ "{:,}".format(leader[1]) }} pts
+                                {% if loop.index <= 3 %}
+                                    <div style="font-size:0.8rem; color:#94a3b8; margin-top:4px;">
+                                        {% if loop.index == 1 %}👑 Top Contributor{% endif %}
+                                        {% if loop.index == 2 %}⭐ Amazing Impact{% endif %}
+                                        {% if loop.index == 3 %}🔥 Great Work{% endif %}
+                                    </div>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="empty-state">
+                                <i class="fa-regular fa-face-smile"></i>
+                                <h3>No Heroes Yet! 🌟</h3>
+                                <p>Be the first to make an impact and appear on the leaderboard!</p>
+                                <p>Start by donating food, money, or volunteering your time.</p>
+                                {% if not user %}
+                                    <a href="{{ url_for('login_page') }}" style="display:inline-block; margin-top:15px; padding:10px 20px; background:var(--green); color:white; text-decoration:none; border-radius:10px; font-weight:600;">
+                                        Login to Get Started
+                                    </a>
+                                {% else %}
+                                    <a href="{{ url_for('contribution') }}" style="display:inline-block; margin-top:15px; padding:10px 20px; background:var(--green); color:white; text-decoration:none; border-radius:10px; font-weight:600;">
+                                        Start Contributing
+                                    </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Badge Legend -->
+        <div class="badge-legend">
+            <h3>🏅 Badge System</h3>
+            <div class="badge-list">
+                <span class="badge-pill bg-bronze">Bronze (Level 1-4)</span>
+                <span class="badge-pill bg-silver">Silver (Level 5-9)</span>
+                <span class="badge-pill bg-gold">Gold (Level 10-14)</span>
+                <span class="badge-pill bg-platinum">Platinum (Level 15-19)</span>
+                <span class="badge-pill bg-elite">Elite (Level 20+)</span>
+            </div>
+            <p style="text-align:center; margin-top:15px; color:#666; font-size:0.9rem;">
+                Earn points by donating food, money, and volunteering time to level up!
+            </p>
+        </div>
+
+        <!-- Quick Stats -->
+        {% if leaders %}
+        <div style="text-align:center; margin-top:30px; color:#666; font-size:0.9rem;">
+            <p>
+                🎯 <strong>{{ leaders|length }}</strong> active contributors • 
+                ⭐ Total Community Impact: <strong>{{ "{:,}".format(leaders|sum(attribute=1)) }}</strong> points
+            </p>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Add subtle animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const rows = document.querySelectorAll('tbody tr');
+            rows.forEach((row, index) => {
+                row.style.animationDelay = `${index * 0.1}s`;
+                row.style.animation = 'fadeInUp 0.6s ease-out forwards';
+                row.style.opacity = '0';
+            });
+        });
+
+        // Add CSS animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+
+</body>
+</html>
