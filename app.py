@@ -1,9 +1,33 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from flask_mail import Mail, Message
 import sqlite3, random, hashlib, requests
+from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import timedelta
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
+
+
+
+# ===============================
+# 🔑 HELPER FUNCTIONS
+# ===============================
+def hash_password(password):
+    return generate_password_hash(password)  # PBKDF2 + SHA256 by default
+
+def verify_password(hashed, password):
+    return check_password_hash(hashed, password)
 
 app = Flask(__name__)
-app.secret_key = "super_secret_key_here"
+
+
+
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=False, #Change to "True" after hosting #The session cookie cannot be accessed by JavaScript
+    SESSION_COOKIE_SECURE=True,   #Cookie is only sent over HTTPS, not plain HTTP
+    SESSION_COOKIE_SAMESITE='Lax' #Browsers block cookies from being sent in most cross-site requests
+)
+app.secret_key = "super_secret_key_here" # can be changed to "secrets.token_hex(32)" after hosting
 
 # ==============================================================
 # 📧 EMAIL CONFIGURATION
@@ -15,7 +39,20 @@ app.config['MAIL_USERNAME'] = '4elements.fontys@gmail.com'
 app.config['MAIL_PASSWORD'] = 'fojk hqsu ocwj qyid'
 app.config['MAIL_DEFAULT_SENDER'] = '4elements.fontys@gmail.com'
 
+#session duration set to 3 days 
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=3)
+
 mail = Mail(app)
+
+
+# ===============================
+# 🛡️ RATE LIMITER CONFIG
+# ===============================
+limiter = Limiter(
+    key_func=get_remote_address,  # Use IP address to track requests
+    default_limits=[]             # Optional: default limits for all routes
+)
+limiter.init_app(app)
 
 # ==============================================================
 # 🗂️ DATABASE SETUP (FINAL + ALL FIXES)
@@ -738,6 +775,7 @@ def login_page():
 
 
 @app.route("/register", methods=["POST"])
+@limiter.limit("5 per hour")
 def register():
     name = request.form["name"]
     email = request.form["email"]
@@ -776,6 +814,7 @@ def register():
 
 
 @app.route("/login", methods=["POST"])
+@limiter.limit("5 per minute")
 def login():
     email = request.form["email"]
     password = request.form["password"]
@@ -795,6 +834,10 @@ def login():
 
     # Normal user login
     if user and verify_password(user[3], password):
+
+        session.clear()               # 1. prevent session fixation
+        session.permanent = True      # 2. enable persistent session
+
         session["user"] = user[1]
         session["email"] = user[2]
         session["user_type"] = "user"
@@ -803,6 +846,10 @@ def login():
 
     # Donor login
     if donor and verify_password(donor[3], password):
+
+        session.clear()               # 1. prevent session fixation
+        session.permanent = True      # 2. enable persistent session
+
         session["user"] = donor[1]
         session["email"] = donor[2]
         session["user_type"] = "donor"
