@@ -1,157 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <title>Request Volunteers | 4Elements</title>
-
-    <!-- Global stylesheet -->
+    <title>Request Volunteers</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
     <style>
-        body {
-            background: #f4faf6;
-            font-family: "Poppins", sans-serif;
-            margin: 0;
-            padding: 40px 0;
-            display: flex;
-            justify-content: center;
-        }
-        
-        .form-container {
-            width: 520px;
-            background: #ffffff;
-            padding: 35px 32px;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            animation: fadeIn 0.7s ease;
-        }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .title {
-            text-align: center;
-            font-size: 26px;
-            font-weight: 700;
-            color: #2b6e43;
-            margin-bottom: 5px;
-        }
-        
-        .subtitle {
-            text-align: center;
-            font-size: 14px;
-            color: #6f8f77;
-            margin-bottom: 25px;
-        }
-        
-        input,
-        select,
-        textarea {
-            width: 100%;
-            padding: 14px;
-            margin-top: 14px;
-            background: #f9fdf9;
-            border-radius: 14px;
-            border: 1px solid #d6e8da;
-            font-size: 15px;
-            transition: 0.25s;
-        }
-        
-        textarea {
-            height: 110px;
-            resize: none;
-        }
-        
-        input:focus,
-        select:focus,
-        textarea:focus {
-            border-color: #2e8f55;
-            box-shadow: 0 0 8px rgba(46, 143, 85, 0.2);
-            outline: none;
-        }
-        
-        .submit-btn {
-            margin-top: 28px;
-            width: 100%;
-            background: #2e8f55;
-            padding: 14px;
-            border: none;
-            border-radius: 30px;
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.25s;
-        }
-        
-        .submit-btn:hover {
-            background: #256f44;
-            transform: translateY(-2px);
-        }
-        
-        .back-btn {
-            display: block;
-            text-align: center;
-            margin-top: 14px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #2b6e43;
-            text-decoration: none;
-        }
-        
-        .back-btn:hover {
-            text-decoration: underline;
-        }
+        body { background: #f4faf6; font-family: "Poppins", sans-serif; display: flex; justify-content: center; padding-top: 50px; }
+        .form-container { width: 500px; background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        input, select, textarea { width: 100%; padding: 12px; margin-top: 10px; border: 1px solid #ddd; border-radius: 10px; }
+        button { width: 100%; padding: 12px; background: #2e8f55; color: white; border: none; border-radius: 25px; margin-top: 20px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
-
 <body>
-
     <div class="form-container">
-
-        <h2 class="title">Request Volunteers</h2>
-        <p class="subtitle">Submit details for the volunteer task your organization needs.</p>
-
+        <h2 style="text-align:center; color:#2e8f55;">Request Volunteers</h2>
         <form action="{{ url_for('submit_request_volunteers') }}" method="POST">
-
-            <input type="text" name="task_title" placeholder="Task Title (e.g., Packing Boxes)" required>
-
-            <input type="number" name="needed_people" placeholder="Number of Volunteers Needed" required>
-
+            <input type="text" name="task_title" placeholder="Task Title" required>
+            <input type="number" name="needed_people" placeholder="Volunteers Needed" required>
             <input type="date" name="task_date" required>
-
-            <select name="duration">
-                <option value="1 hour">1 hour</option>
-                <option value="2 hours">2 hours</option>
-                <option value="3 hours">3 hours</option>
-                <option value="Half Day">Half Day</option>
-                <option value="Full Day">Full Day</option>
+            
+            <label style="font-size:12px; color:#666; margin-top:10px; display:block;">Task Criticality (Affects Points Awarded)</label>
+            <select name="urgency">
+                <option value="Low">Low (Standard Points)</option>
+                <option value="Medium" selected>Medium (1.5x Points)</option>
+                <option value="High">High (2x Points)</option>
+                <option value="Critical">Critical (3x Points)</option>
             </select>
-
-            <textarea name="description" placeholder="Describe the task (optional)"></textarea>
-
-            <button type="submit" class="submit-btn">
-                Submit Volunteer Request
-            </button>
-
-            <a href="{{ url_for('account_donor') }}" class="back-btn">← Back to Dashboard</a>
-
+            
+            <select name="duration">
+                <option>1 Hour</option><option>2 Hours</option><option>4 Hours</option><option>Full Day</option>
+            </select>
+            <textarea name="description" placeholder="Description" rows="4"></textarea>
+            <button type="submit">Post Opportunity</button>
+            <div style="text-align:center; margin-top:15px;"><a href="/account_donor" style="color:#666; text-decoration:none;">Back</a></div>
         </form>
-
     </div>
-
 </body>
-
 </html>

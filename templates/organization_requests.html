@@ -1,133 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <title>Volunteer Requests | 4Elements</title>
-
+    <title>Manage Volunteers</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
     <style>
-        body {
-            background: #f4faf6;
-            font-family: "Poppins", sans-serif;
-            padding: 30px;
-        }
-        
-        .table-container {
-            background: white;
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-            max-width: 1100px;
-            margin: auto;
-        }
-        
-        h2 {
-            font-size: 26px;
-            color: #2e8f55;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        th {
-            background: #2e8f55;
-            color: white;
-            padding: 12px;
-        }
-        
-        td {
-            padding: 10px;
-            border-bottom: 1px solid #e6f0ea;
-            font-size: 14px;
-        }
-        
-        .status {
-            font-weight: 600;
-            border-radius: 10px;
-            padding: 4px 10px;
-        }
-        
-        .pending {
-            background: #fff4cc;
-            color: #a57a00;
-        }
-        
-        .approved {
-            background: #d3f8d6;
-            color: #1e7a32;
-        }
-        
-        .rejected {
-            background: #ffd4d4;
-            color: #a83232;
-        }
-        
-        .btn {
-            padding: 6px 12px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 600;
-            color: white;
-        }
-        
-        .approve-btn {
-            background: #2e8f55;
-        }
-        
-        .reject-btn {
-            background: #d9534f;
-        }
+        body { background: #f4faf6; font-family: "Poppins", sans-serif; padding: 40px; }
+        .container { max-width: 1000px; margin: auto; }
+        .req-card { background: white; border-radius: 16px; padding: 25px; margin-bottom: 30px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        .req-header { display: flex; justify-content: space-between; border-bottom: 2px solid #f0f0f0; padding-bottom: 15px; margin-bottom: 20px; }
+        .req-title { font-size: 1.2rem; color: #1f5c3f; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; color: #888; font-size: 13px; padding-bottom: 10px; }
+        td { padding: 12px 0; border-bottom: 1px solid #eee; vertical-align: middle; }
+        .status { padding: 4px 10px; border-radius: 10px; font-size: 12px; font-weight: bold; }
+        .pending { background: #fff7ed; color: #c2410c; }
+        .approved { background: #dcfce7; color: #166534; }
+        .completed { background: #e0f2fe; color: #075985; }
+        .btn { padding: 6px 12px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: bold; margin-right: 5px; border: none; cursor: pointer; }
+        .btn-approve { background: #2e8f55; color: white; }
+        .btn-reject { background: #ef4444; color: white; }
+        .btn-log { background: #3b82f6; color: white; }
+        .hidden-form { display: none; margin-top: 10px; background: #f8fafc; padding: 15px; border-radius: 10px; }
     </style>
+    <script>
+        function toggleForm(id) {
+            var x = document.getElementById("form-" + id);
+            if (x.style.display === "none") { x.style.display = "block"; } else { x.style.display = "none"; }
+        }
+    </script>
 </head>
-
 <body>
+    <div class="container">
+        <h1 style="color:#1f5c3f; margin-bottom:30px;">Volunteer Management</h1>
+        
+        {% for req in request_data %}
+        <div class="req-card">
+            <div class="req-header">
+                <div>
+                    <div class="req-title">{{ req.info[1] }}</div>
+                    <div style="font-size:13px; color:#666;">{{ req.info[2] }} · Needs {{ req.info[3] }} people</div>
+                </div>
+                <div class="status" style="height:fit-content; background:#f3f4f6;">{{ req.info[4] }} Priority</div>
+            </div>
 
-    <div class="table-container">
-        <h2>Volunteer Requests</h2>
-
-        <table>
-            <tr>
-                <th>Task</th>
-                <th>People Needed</th>
-                <th>Date</th>
-                <th>Duration</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-
-            {% for req in requests %}
-            <tr>
-                <td>{{ req[1] }}</td>
-                <td>{{ req[2] }}</td>
-                <td>{{ req[3] }}</td>
-                <td>{{ req[4] }}</td>
-
-                <td>
-                    <span class="status {{ req[5] }}">{{ req[5].capitalize() }}</span>
-                </td>
-
-                <td>
-                    {% if req[5] == 'pending' %}
-                    <a class="btn approve-btn" href="{{ url_for('approve_request', req_id=req[0]) }}">Approve</a>
-                    <a class="btn reject-btn" href="{{ url_for('reject_request', req_id=req[0]) }}">Reject</a> {% else %} --- {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-
-        <div style="text-align:center; margin-top:25px;">
-            <a href="{{ url_for('account_donor') }}" style="text-decoration:none; color:#2e8f55; font-weight:600;">
-                ← Back to Dashboard
-            </a>
+            {% if req.apps %}
+            <table>
+                <tr>
+                    <th>Volunteer</th>
+                    <th>Motivation</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+                {% for app in req.apps %}
+                <tr>
+                    <td><strong>{{ app[1] }}</strong><br><span style="font-size:12px; color:#888;">{{ app[2] }}</span></td>
+                    <td style="max-width:300px; font-size:13px; color:#555;">"{{ app[3] }}"</td>
+                    <td><span class="status {{ app[4] }}">{{ app[4]|upper }}</span></td>
+                    <td>
+                        {% if app[4] == 'pending' %}
+                            <a href="/application/status/{{ app[0] }}/approve" class="btn btn-approve">Approve</a>
+                            <a href="/application/status/{{ app[0] }}/reject" class="btn btn-reject">Reject</a>
+                        {% elif app[4] == 'approved' %}
+                            <button onclick="toggleForm({{ app[0] }})" class="btn btn-log">Log Hours</button>
+                            
+                            <!-- Hidden Form to Log Hours -->
+                            <div id="form-{{ app[0] }}" class="hidden-form">
+                                <form action="/volunteer/complete/{{ app[0] }}" method="POST" style="display:flex; gap:10px; align-items:center;">
+                                    <!-- Hidden urgency field to calculate points -->
+                                    <input type="hidden" name="urgency" value="{{ req.info[4] }}">
+                                    <input type="number" name="hours" placeholder="Hours worked" step="0.5" required style="width:100px; padding:8px;">
+                                    <button type="submit" class="btn btn-approve">Confirm & Award Points</button>
+                                </form>
+                            </div>
+                        {% elif app[4] == 'completed' %}
+                            <span style="font-size:12px; color:#059669;">
+                                {{ app[5] }} hrs · {{ app[6] }} pts awarded
+                            </span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+                <p style="color:#999; font-style:italic; font-size:14px;">No applications yet.</p>
+            {% endif %}
         </div>
+        {% endfor %}
+        
+        <div style="text-align:center;"><a href="/account_donor" style="color:#2e8f55; text-decoration:none;">← Back to Dashboard</a></div>
     </div>
-
 </body>
-
 </html>

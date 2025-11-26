@@ -266,6 +266,26 @@ def init_db():
         )
     ''')
 
+    # ✅ NEW: Volunteer Applications (Links Users to Requests)
+    cursor.execute('''CREATE TABLE IF NOT EXISTS volunteer_applications (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        user_id INTEGER NOT NULL,
+                        request_id INTEGER NOT NULL,
+                        motivation TEXT,
+                        status TEXT DEFAULT 'pending',
+                        hours_worked REAL DEFAULT 0,
+                        points_awarded INTEGER DEFAULT 0,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        FOREIGN KEY (user_id) REFERENCES users(id),
+                        FOREIGN KEY (request_id) REFERENCES volunteer_requests(id)
+                    )''')
+
+    # 2. Ensure volunteer_requests has the 'urgency' column (Safe update)
+    cursor.execute("PRAGMA table_info(volunteer_requests)")
+    columns = [info[1] for info in cursor.fetchall()]
+    if 'urgency' not in columns:
+        cursor.execute("ALTER TABLE volunteer_requests ADD COLUMN urgency TEXT DEFAULT 'Medium'")
+
     # ----------------------------------------------------------
     # REQUESTED ITEMS
     # ----------------------------------------------------------
@@ -286,6 +306,25 @@ def init_db():
     conn.commit()
     conn.close()
 
+def update_volunteer_request_status(request_id):
+    """Check if volunteer request is fulfilled and close it if needed"""
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    
+    # Count approved applications for this request
+    c.execute("SELECT COUNT(*) FROM volunteer_applications WHERE request_id=? AND status='approved'", (request_id,))
+    approved_count = c.fetchone()[0]
+    
+    # Get needed people for this request
+    c.execute("SELECT needed_people FROM volunteer_requests WHERE id=?", (request_id,))
+    needed_people = c.fetchone()[0]
+    
+    # If approved applications meet or exceed needed people, close the request
+    if approved_count >= needed_people:
+        c.execute("UPDATE volunteer_requests SET status='closed' WHERE id=?", (request_id,))
+        conn.commit()
+    
+    conn.close()
 
 def update_user_level(c, user_id):
     # Fetch user level data
@@ -334,17 +373,6 @@ def update_user_level(c, user_id):
     progress_percent = int((progress / target) * 100) if target > 0 else 0
 
     return progress_percent, badge, level
-
-
-# ==============================================================
-# ⚙️ USER SETTINGS PAGE
-# ==============================================================
-@app.route("/settings")
-def settings_page():
-    if "user" not in session or session.get("user_type") != "user":
-        return redirect(url_for("login_page"))
-
-    return render_template("settings.html", name=session["user"])
 
 # ============================================================
 # 🧮 POINTS, LEVEL & BADGE SYSTEM (FINAL VERSION)
@@ -861,59 +889,56 @@ def login_donor():
     return redirect(url_for("login_page_donor"))
 
 
-@app.route("/account_donor")
+@app.route('/account_donor')
 def account_donor():
-    if "user" in session and session.get("user_type") == "donor":
-        conn = sqlite3.connect("database.db")
-        c = conn.cursor()
+    if session.get('user_type') != 'donor': 
+        return redirect(url_for('login_page_donor'))
+    
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    
+    # 1. Get Donor Info
+    c.execute("SELECT * FROM donors WHERE id=?", (session['donor_id'],))
+    donor = c.fetchone()
+    
+    # 2. Get donor stats including money donated
+    donor_stats = get_donor_stats(session['donor_id'])
+    
+    # 3. Count Pending Food Promises (Incoming donations)
+    c.execute("SELECT COUNT(*) FROM donation_promises WHERE donor_id=? AND status='pending'", (session['donor_id'],))
+    pending_food_promises = c.fetchone()[0]
+    
+    # 4. Count Active Volunteer Requests (Opportunities you posted that are still open)
+    # Using 'open' here since we are now correctly setting it on creation
+    c.execute("SELECT COUNT(*) FROM volunteer_requests WHERE donor_id=? AND status='open'", (session['donor_id'],))
+    active_vol_requests = c.fetchone()[0]
 
-        c.execute("SELECT * FROM donors WHERE email=?", (session["email"],))
-        donor_info = c.fetchone()
+    # 5. Count Active Food Item Requests (Items you requested that aren't filled)
+    c.execute("SELECT COUNT(*) FROM requested_items WHERE donor_id=? AND status='pending'", (session['donor_id'],))
+    active_item_requests = c.fetchone()[0]
 
-        if not donor_info:
-            conn.close()
-            flash("Donor account not found.", "error")
-            return redirect(url_for("home"))
-
-        donor_id = donor_info[0]
-
-        # Fetch stats
-        c.execute("""
-            SELECT food_received, food_donations
-            FROM donors
-            WHERE id = ?
-        """, (donor_id,))
-        stats = c.fetchone()
-
-        food_received = stats[0] if stats else 0
-        food_donations = stats[1] if stats else 0
-
-        # Count pending promises
-        c.execute("""
-            SELECT COUNT(*)
-            FROM donation_promises
-            WHERE donor_id=? AND status='pending'
-        """, (donor_id,))
-        pending_count = c.fetchone()[0]
-
-        conn.close()
-
-        return render_template(
-            "account_donor.html",
-            name=donor_info[1],
-            food_bank_name=donor_info[4],
-            address=donor_info[5],
-            food_donations=food_received,
-            food_received=food_received,
-            volunteer_hours=0,
-            money_donated=0,
-            points=food_received * 2,
-            pending_count=pending_count,
-            activity=[]
-        )
-
-    flash("Please log in as a donor to continue.", "error")
-    return redirect(url_for("login_page_donor"))
+    # Total Active Requests (Things the Food Bank is asking for)
+    total_active_requests = active_vol_requests + active_item_requests
+    
+    # Use the activity from donor_stats instead of querying separately
+    recent_activity = donor_stats['activity'][:4]  # Get first 4 activities
+        
+    conn.close()
+    
+    return render_template('account_donor.html', 
+                           name=donor[1], 
+                           food_bank_name=donor[4], 
+                           address=donor[5],
+                           food_received=donor[8] if len(donor) > 8 else 0, # From DB
+                           food_donations=donor[9] if len(donor) > 9 else 0, 
+                           money_donated=donor_stats['total_money'],  # ADD THIS LINE
+                           volunteer_hours=donor_stats['total_hours'],  # ADD THIS LINE
+                           points=int(donor_stats['total_money'] * 1 + donor_stats['total_food'] * 2 + donor_stats['total_hours'] * 5),  # ADD THIS LINE
+                           active_requests=total_active_requests,
+                           donors_connected=pending_food_promises,
+                           volunteers_managed=0,
+                           donor_activity=recent_activity, 
+                           pending_count=pending_food_promises)
 # ==============================================================
 # 👤 USER ACCOUNT (WITH LEVEL + FOOD FIX)
 # ==============================================================
@@ -1265,8 +1290,66 @@ def donate_money_bank(donor_id):
     )
 
 # ==============================================================
-# VOLUNTEER REQUEST PAGES (ORGANIZATION)
+# 🤝 NEW VOLUNTEER FEATURES (Add to app.py)
 # ==============================================================
+
+# 1. USER: Apply for a position with motivation
+
+
+# 2. DONOR: View Requests & Approve Applications
+@app.route('/organization/requests')
+def organization_requests():
+    if session.get("user_type") != "donor": return redirect(url_for("home"))
+    
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    
+    # Get this donor's requests
+    c.execute("SELECT id, task_title, task_date, needed_people, urgency FROM volunteer_requests WHERE donor_id=? ORDER BY created_at DESC", (session['donor_id'],))
+    my_requests = c.fetchall()
+    
+    full_data = []
+    for req in my_requests:
+        # Get applicants for each request
+        c.execute("""
+            SELECT va.id, u.name, u.email, va.motivation, va.status, va.hours_worked, va.points_awarded
+            FROM volunteer_applications va
+            JOIN users u ON va.user_id = u.id
+            WHERE va.request_id = ?
+        """, (req[0],))
+        applicants = c.fetchall()
+        full_data.append({ "info": req, "apps": applicants })
+        
+    conn.close()
+    return render_template("organization_requests.html", request_data=full_data)
+
+# 3. DONOR: Change Application Status
+@app.route('/application/status/<int:app_id>/<string:action>')
+def update_application_status(app_id, action):
+    if session.get("user_type") != "donor": return redirect(url_for("home"))
+    
+    new_status = 'approved' if action == 'approve' else 'rejected'
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    
+    # Get request_id before updating
+    c.execute("SELECT request_id FROM volunteer_applications WHERE id=?", (app_id,))
+    request_id = c.fetchone()[0]
+    
+    # Update application status
+    c.execute("UPDATE volunteer_applications SET status=? WHERE id=?", (new_status, app_id))
+    conn.commit()
+    conn.close()
+    
+    # Check if request should be closed (only if approved)
+    if new_status == 'approved':
+        update_volunteer_request_status(request_id)
+    
+    flash(f"Application {new_status}.", "success")
+    return redirect(url_for('organization_requests'))
+
+
+
 @app.route('/request-volunteers')
 def request_volunteers_page():
     if session.get("user_type") != "donor":
@@ -1278,50 +1361,33 @@ def request_volunteers_page():
 def submit_request_volunteers():
     if session.get("user_type") != "donor":
         return redirect(url_for("home"))
-
+    
+    # 1. Get form data
     donor_id = session.get("donor_id")
     task_title = request.form["task_title"]
     needed_people = request.form["needed_people"]
     task_date = request.form["task_date"]
     duration = request.form["duration"]
     description = request.form["description"]
+    urgency = request.form.get("urgency", "Medium") # Get urgency, default to Medium
 
+    # 2. Save to Database - FIXED: Explicitly setting status='open'
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
     c.execute("""
         INSERT INTO volunteer_requests 
-        (donor_id, task_title, needed_people, task_date, duration, description)
-        VALUES (?, ?, ?, ?, ?, ?)
-    """, (donor_id, task_title, needed_people, task_date, duration, description))
+        (donor_id, task_title, needed_people, task_date, duration, description, urgency, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, 'open')
+    """, (donor_id, task_title, needed_people, task_date, duration, description, urgency))
 
     conn.commit()
     conn.close()
 
-    flash("Volunteer request submitted successfully!", "success")
-    return redirect(url_for('account_donor'))
-
-
-@app.route('/organization/requests')
-def organization_requests():
-    if session.get("user_type") != "donor":
-        return redirect(url_for("home"))
-
-    donor_id = session.get("donor_id")
-
-    conn = sqlite3.connect("database.db")
-    c = conn.cursor()
-    c.execute("""
-        SELECT id, task_title, needed_people, task_date, duration, status, created_at
-        FROM volunteer_requests
-        WHERE donor_id=?
-        ORDER BY created_at DESC
-    """, (donor_id,))
+    # 3. Show success message
+    flash("✅ Volunteer request submitted successfully! Volunteers can now apply to help.", "success")
     
-    requests_list = c.fetchall()
-    conn.close()
-
-    return render_template("organization_requests.html", requests=requests_list)
-
+    # 4. Redirect back to donor account
+    return redirect(url_for('account_donor'))
 
 @app.route('/request/approve/<int:req_id>')
 def approve_request(req_id):
@@ -1366,9 +1432,8 @@ def submit_request_item():
     conn.commit()
     conn.close()
 
-    flash("Request submitted successfully!", "success")
+    flash("✅ Food item request submitted successfully! Donors can now see what you need.", "success")
     return redirect(url_for("account_donor"))
-
 # ==============================================================
 # DONATION SUB-PAGES (FOOD, TIME)
 # ==============================================================
@@ -1394,19 +1459,28 @@ def donate_food():
 def donate_time():
     conn = sqlite3.connect('database.db')
     c = conn.cursor()
-
+    
+    # ONLY show open volunteer requests with future dates
     c.execute("""
-        SELECT id, task_title, description, needed_people, task_date, duration
-        FROM volunteer_requests
-        WHERE status='approved'
+        SELECT vr.id, vr.task_title, vr.description, vr.needed_people, 
+               vr.task_date, vr.duration, vr.urgency, 
+               d.food_bank_name, d.address
+        FROM volunteer_requests vr
+        JOIN donors d ON vr.donor_id = d.id
+        WHERE vr.status='open' 
+        AND DATE(vr.task_date) >= DATE('now')
+        ORDER BY 
+            CASE vr.urgency
+                WHEN 'Critical' THEN 1
+                WHEN 'High' THEN 2
+                WHEN 'Medium' THEN 3
+                WHEN 'Low' THEN 4
+            END,
+            vr.task_date ASC
     """)
-
     roles = c.fetchall()
     conn.close()
-
     return render_template('donate_time.html', roles=roles)
-
-
 # ==============================================================
 # 🌿 FOOD DONATION - PROMISE PAGE
 # ==============================================================
@@ -1826,10 +1900,233 @@ def help_page():
     return render_template("help_page.html")
 
 # ==============================================================
+# ⚙️ SETTINGS PAGE (Missing Route)
+# ==============================================================
+@app.route("/settings")
+def settings_page():
+    if "user" not in session: return redirect(url_for("login_page"))
+    return render_template("settings.html", name=session["user"])
+# ==============================================================
+# 🏆 LEADERBOARD (Missing Route)
+# ==============================================================
+# ==============================================================
+# 🏆 LEADERBOARD - FIXED & WORKING
+# ==============================================================
+@app.route('/leaderboard')
+def leaderboard():
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    
+    # Get top 20 users with points, level, and badge
+    c.execute("""
+        SELECT name, points, level, badge 
+        FROM users 
+        WHERE points > 0 
+        ORDER BY points DESC, level DESC 
+        LIMIT 20
+    """)
+    leaders = c.fetchall()
+    conn.close()
+    
+    return render_template('leaderboard.html', 
+                         leaders=leaders, 
+                         user=session.get("user"), 
+                         user_type=session.get("user_type"))
+# ==============================================================
+# 🤝 VOLUNTEER SYSTEM ENHANCEMENTS
+# ==============================================================
+
+def check_and_close_volunteer_request(request_id):
+    """Check if volunteer request is fulfilled and close it automatically"""
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    
+    # Count completed volunteer hours for this request
+    c.execute("""
+        SELECT COALESCE(SUM(va.hours_worked), 0) 
+        FROM volunteer_applications va 
+        WHERE va.request_id=? AND va.status='completed'
+    """, (request_id,))
+    total_hours_worked = c.fetchone()[0]
+    
+    # Get total hours needed (estimate based on needed_people * typical hours)
+    c.execute("SELECT needed_people, duration FROM volunteer_requests WHERE id=?", (request_id,))
+    result = c.fetchone()
+    if result:
+        needed_people, duration = result
+        
+        # Parse duration to estimate total hours needed
+        hours_needed = 0
+        if 'hour' in duration.lower():
+            # Extract hours from duration string (e.g., "4 hours" -> 4)
+            import re
+            match = re.search(r'(\d+)\s*hour', duration.lower())
+            if match:
+                hours_needed = int(match.group(1)) * needed_people
+        else:
+            # Default estimation
+            hours_needed = needed_people * 4  # Assume 4 hours per person
+        
+        # Close request if hours worked meet or exceed needed hours
+        if total_hours_worked >= hours_needed:
+            c.execute("UPDATE volunteer_requests SET status='completed' WHERE id=?", (request_id,))
+            conn.commit()
+            conn.close()
+            return True
+    
+    conn.close()
+    return False
+
+@app.route('/volunteer/complete/<int:app_id>', methods=['POST'])
+def log_volunteer_hours(app_id):
+    if session.get("user_type") != "donor": 
+        return redirect(url_for("home"))
+    
+    hours = float(request.form['hours'])
+    urgency = request.form['urgency']
+    
+    # ENHANCED POINT SYSTEM - Better calculation
+    base_points_per_hour = 15  # Increased base points
+    multiplier = {
+        "Low": 1.0,
+        "Medium": 1.5, 
+        "High": 2.0,
+        "Critical": 3.0
+    }.get(urgency, 1.0)
+    
+    # Bonus for longer commitments
+    time_bonus = 1.0
+    if hours >= 8:
+        time_bonus = 1.5  # 50% bonus for full-day commitments
+    elif hours >= 4:
+        time_bonus = 1.2  # 20% bonus for half-day commitments
+    
+    points = int(hours * base_points_per_hour * multiplier * time_bonus)
+    
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    
+    try:
+        # 1. Update Application Record
+        c.execute("""
+            UPDATE volunteer_applications 
+            SET status='completed', hours_worked=?, points_awarded=? 
+            WHERE id=?
+        """, (hours, points, app_id))
+        
+        # 2. Get User and Request Info
+        c.execute("""
+            SELECT u.id, u.email, va.request_id 
+            FROM volunteer_applications va 
+            JOIN users u ON va.user_id = u.id 
+            WHERE va.id=?
+        """, (app_id,))
+        user_id, user_email, request_id = c.fetchone()
+        
+        # 3. Add to Donations History
+        c.execute("""
+            INSERT INTO donations (user_email, donation_type, hours, donor_id, status) 
+            VALUES (?, 'time', ?, ?, 'completed')
+        """, (user_email, hours, session['donor_id']))
+        
+        conn.commit()
+        
+        # 4. Award Points & Update Level
+        leveled_up = update_user_points(user_id, points)
+        
+        # 5. Check if we should close the volunteer request
+        request_closed = check_and_close_volunteer_request(request_id)
+        
+        # 6. Send notification to user
+        c.execute("""
+            INSERT INTO notifications (user_id, donor_id, message) 
+            VALUES (?, ?, ?)
+        """, (user_id, session['donor_id'], 
+              f"🎉 You earned {points} points for volunteering {hours} hours! {'(Level Up! 🚀)' if leveled_up else ''}"))
+        
+        conn.commit()
+        
+        flash_message = f"✅ Confirmed! {points} points awarded to volunteer."
+        if leveled_up:
+            flash_message += " 🚀 Volunteer leveled up!"
+        if request_closed:
+            flash_message += " 📋 Volunteer request automatically completed!"
+            
+        flash(flash_message, "success")
+        
+    except Exception as e:
+        flash(f"❌ Error: {str(e)}", "error")
+    finally:
+        conn.close()
+        
+    return redirect(url_for('organization_requests'))
+
+@app.route('/volunteer/apply/<int:request_id>', methods=['GET', 'POST'])
+def volunteer_apply(request_id):
+    if 'user_id' not in session: 
+        flash("Please login to apply for volunteer positions.", "error")
+        return redirect(url_for('login_page'))
+
+    if request.method == 'POST':
+        motivation = request.form['motivation']
+        conn = sqlite3.connect('database.db')
+        c = conn.cursor()
+        try:
+            # Check if already applied
+            c.execute("SELECT id FROM volunteer_applications WHERE user_id=? AND request_id=?", 
+                     (session['user_id'], request_id))
+            if c.fetchone():
+                flash("You have already applied for this volunteer position.", "warning")
+            else:
+                # Insert application
+                c.execute("""
+                    INSERT INTO volunteer_applications (user_id, request_id, motivation) 
+                    VALUES (?, ?, ?)
+                """, (session['user_id'], request_id, motivation))
+                conn.commit()
+                
+                # Get food bank name for notification
+                c.execute("""
+                    SELECT d.food_bank_name, vr.task_title 
+                    FROM volunteer_requests vr 
+                    JOIN donors d ON vr.donor_id = d.id 
+                    WHERE vr.id=?
+                """, (request_id,))
+                donor_name, task_title = c.fetchone()
+                
+                # Send notification to donor
+                c.execute("""
+                    INSERT INTO notifications (donor_id, message) 
+                    VALUES (?, ?)
+                """, (session['donor_id'] if session.get('donor_id') else None, 
+                      f"📝 New volunteer application for '{task_title}' from {session['user']}"))
+                
+                conn.commit()
+                
+                flash("🎉 Application submitted successfully!", "success")
+                return redirect(url_for('donate_time'))
+                
+        except Exception as e:
+            flash(f"Application failed: {str(e)}", "error")
+        finally:
+            conn.close()
+    
+    # GET: Show application form
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute("""
+        SELECT task_title, task_date, description 
+        FROM volunteer_requests 
+        WHERE id=?
+    """, (request_id,))
+    req = c.fetchone()
+    conn.close()
+    
+    return render_template('volunteer_apply.html', request_id=request_id, req=req)
+
+# ==============================================================
 # 🚀 START APP
 # ==============================================================
 if __name__ == "__main__":
     init_db()
     app.run(debug=True)
-
-# ==============================================================

@@ -1,421 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Helping Journey | 4 Elements</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
-
-
+    <title>Projects | 4 Elements</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-         :root {
-            --green: #33cc73;
-            --dark-green: #1f5c3f;
-            --soft-bg: #f5faf7;
-            --gray: #555;
-            --line: #dcdcdc;
-            --card-bg: #ffffff;
-        }
-        
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        :root {
+            --green: #2e8f55;
+            --green-dark: #1e4d32;
+            --white: #ffffff;
+            --gray-light: #f4f7f6;
+            --text-dark: #243528;
+            --radius: 16px;
+            --shadow: 0 6px 22px rgba(0, 0, 0, 0.08);
         }
         
         body {
-            font-family: "Poppins", sans-serif;
-            background: radial-gradient(circle at top, #f7fff9 0, #f5faf7 40%, #fefaf5 100%);
             margin: 0;
-            padding: 0;
-            color: var(--gray);
-        }
-        /* Header */
-        
-        .header {
-            text-align: center;
-            padding: 80px 20px 40px;
-            animation: fadeInHeader 0.9s ease;
+            background: var(--gray-light);
+            font-family: "Poppins", sans-serif;
         }
         
-        .header h1 {
-            font-size: 2.8rem;
-            font-weight: 800;
-            color: var(--dark-green);
-            letter-spacing: 0.03em;
-        }
-        
-        .header p {
-            max-width: 650px;
-            margin: 14px auto 0;
-            font-size: 1.1rem;
-            line-height: 1.7;
-            color: #666;
-        }
-        
-        .header span.highlight {
-            color: var(--green);
-            font-weight: 600;
-        }
-        
-        @keyframes fadeInHeader {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        /* Timeline Container */
-        
-        .timeline-wrapper {
+        .navbar {
+            background: var(--white);
+            padding: 18px 48px;
             display: flex;
-            justify-content: center;
-            padding: 20px 0 80px;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
         
-        .timeline {
-            position: relative;
-            width: min(900px, 90%);
-            padding-left: 32px;
-        }
-        /* Vertical Line */
+        .logo { font-weight: 700; color: var(--green-dark); font-size: 1.2rem; }
+        .nav-links a { margin-left: 20px; text-decoration: none; color: #555; font-weight: 500; }
+        .nav-links a.active { color: var(--green); }
         
-        .timeline::before {
-            content: "";
-            position: absolute;
-            left: 40px;
-            top: 0;
-            width: 3px;
-            height: 100%;
-            background: linear-gradient(to bottom, #e4f4ea, #dcdcdc);
-            border-radius: 10px;
-        }
-        /* Step */
-        
-        .step {
-            position: relative;
-            margin-bottom: 70px;
-            padding-left: 80px;
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.7s ease;
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
         }
         
-        .step:last-child {
-            margin-bottom: 20px;
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
         }
         
-        .step.visible {
-            opacity: 1;
-            transform: translateY(0);
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: var(--green-dark);
+            margin-bottom: 10px;
         }
-        /* Image bubble instead of icon */
         
-        .step-media {
-            position: absolute;
-            left: 0;
-            top: -4px;
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: radial-gradient(circle at top, #ffffff, #e5f7ec);
-            box-shadow: 0 5px 16px rgba(0, 0, 0, 0.12);
+        .page-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+        
+        .project-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
             overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .project-image {
+            height: 200px;
+            background: linear-gradient(135deg, #2e8f55, #4caf50);
             display: flex;
             align-items: center;
             justify-content: center;
-            animation: bubbleIn 0.6s ease;
+            color: white;
+            font-size: 3rem;
         }
         
-        .step.visible .step-media {
-            animation: bubbleFloat 2.2s ease-in-out infinite alternate;
+        .project-content {
+            padding: 25px;
         }
         
-        .step-media img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .project-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 10px;
         }
         
-        @keyframes bubbleIn {
-            from {
-                transform: scale(0.6);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
+        .project-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
         }
         
-        @keyframes bubbleFloat {
-            from {
-                transform: translateY(0);
-            }
-            to {
-                transform: translateY(-6px);
-            }
-        }
-        /* Content box */
-        
-        .step-content {
-            background: var(--card-bg);
-            border-radius: 18px;
-            padding: 18px 22px 18px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-            position: relative;
-            overflow: hidden;
-        }
-        /* Soft gradient line at top of card */
-        
-        .step-content::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 4px;
-            width: 100%;
-            background: linear-gradient(90deg, #33cc73, #ffcc66);
-        }
-        
-        .step-tag {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.09em;
+        .project-stats {
+            display: flex;
+            justify-content: space-between;
             color: var(--green);
             font-weight: 600;
-            margin-bottom: 4px;
-        }
-        
-        .step h3 {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--dark-green);
-            margin-bottom: 6px;
-        }
-        
-        .step p {
-            font-size: 0.97rem;
-            line-height: 1.7;
-            max-width: 540px;
-            color: #555;
-        }
-        
-        .step-note {
-            margin-top: 8px;
-            font-size: 0.85rem;
-            color: #888;
-            font-style: italic;
-        }
-        /* Subtle glow pulse on cards */
-        
-        .step.visible .step-content {
-            animation: softGlow 2.6s ease-in-out infinite alternate;
-        }
-        
-        @keyframes softGlow {
-            from {
-                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-            }
-            to {
-                box-shadow: 0 8px 24px rgba(51, 204, 115, 0.18);
-            }
-        }
-        /* Footer note */
-        
-        .closing-message {
-            text-align: center;
-            margin: 10px auto 50px;
-            font-size: 0.95rem;
-            color: #777;
-            max-width: 520px;
-        }
-        
-        .closing-message strong {
-            color: var(--dark-green);
-        }
-        /* Responsive */
-        
-        @media (max-width: 700px) {
-            .header h1 {
-                font-size: 2.1rem;
-            }
-            .timeline {
-                padding-left: 20px;
-            }
-            .timeline::before {
-                left: 32px;
-            }
-            .step {
-                padding-left: 78px;
-            }
-            .step-content {
-                padding: 16px 18px 16px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .header {
-                padding-top: 60px;
-            }
-            .header h1 {
-                font-size: 1.9rem;
-            }
-            .header p {
-                font-size: 1rem;
-            }
+            font-size: 0.9rem;
         }
     </style>
 </head>
-
 <body>
-    <!-- Navbar copied from index.html -->
-    <header class="navbar">
-        <div class="logo">
-            <div class="logo-top">
-                <i class="fa-solid fa-hand-holding-heart"></i>
-                <span>4ELEMENTS</span>
-            </div>
-            <span class="logo-subtext">Funding Tomorrow’s Solutions Today</span>
-        </div>
-
-        <nav class="nav-center">
-            <a href="/" class="active">Home</a>
+    <nav class="navbar">
+        <div class="logo">4 Elements</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
             <a href="{{ url_for('about') }}">About</a>
-            <a href="{{ url_for('projects') }}">Projects</a>
-            <a href="{{ url_for('contact') }}">Contact</a>
-        </nav>
-
-        <div class="nav-right">
+            <a href="{{ url_for('projects') }}" class="active">Projects</a>
+            <a href="{{ url_for('leaderboard') }}">Leaderboard</a>
             {% if user %}
-            <span class="welcome-text">👋 Welcome, <strong>{{ user }}</strong></span>
-            <a href="{{ url_for('account') }}" class="btn btn-dashboard">My Account</a>
-            <a href="{{ url_for('logout') }}" class="btn btn-login">Logout</a> {% else %}
-            <a href="{{ url_for('login_page') }}" class="btn btn-login">Login</a>
-            <a href="{{ url_for('login_page') }}" class="btn btn-dashboard">Dashboard</a> {% endif %}
+                <a href="{{ url_for('account_donor') if user_type == 'donor' else url_for('account') }}">Dashboard</a>
+            {% else %}
+                <a href="/login_page">Login</a>
+            {% endif %}
         </div>
-    </header>
+    </nav>
 
-    <div class="header">
-        <h1>The Helping Journey 🤍</h1>
-        <p>
-            Every story starts with <span class="highlight">a simple act of giving</span>. Follow how one shared meal becomes a moment of safety, dignity, and hope.
-        </p>
-    </div>
-
-    <div class="timeline-wrapper">
-        <div class="timeline">
-
-            <!-- Step 1 -->
-            <div class="step">
-                <div class="step-media">
-                    <!-- يد تقدّم طعام -->
-                    <img src="{{ url_for('static', filename='hand_giving_food.png') }}" alt="Hand offering food">
-                </div>
-                <div class="step-content">
-                    <div class="step-tag">Step 1 · It starts with you</div>
-                    <h3>A Meal Offered</h3>
-                    <p>
-                        A person decides not to throw away their extra food, but to share it instead. One simple choice turns potential waste into a chance to help.
-                    </p>
-                    <div class="step-note">“What I have is enough to share.”</div>
+    <div class="container">
+        <div class="page-header">
+            <h1>Our Impact Projects</h1>
+            <p>Discover how we're making a difference in communities worldwide</p>
+        </div>
+        
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-image">🥗</div>
+                <div class="project-content">
+                    <h3 class="project-title">Community Food Drive</h3>
+                    <p class="project-description">Monthly food collection events across major cities to support local food banks and shelters.</p>
+                    <div class="project-stats">
+                        <span>📅 Monthly</span>
+                        <span>👥 2.5K+ Volunteers</span>
+                    </div>
                 </div>
             </div>
-
-            <!-- Step 2 -->
-            <div class="step">
-                <div class="step-media">
-                    <!-- سلة أكل مرسومة -->
-                    <img src="{{ url_for('static', filename='food-basket-illustration.png') }}" alt="Food basket illustration">
-                </div>
-                <div class="step-content">
-                    <div class="step-tag">Step 2 · Collected with care</div>
-                    <h3>Safe & Ready to Share</h3>
-                    <p>
-                        The food is carefully sorted and checked. Every basket is prepared with attention, making sure that what arrives to families is fresh, safe, and dignified.
-                    </p>
-                    <div class="step-note">Every item is treated like it’s going to someone we love.</div>
+            
+            <div class="project-card">
+                <div class="project-image">🌱</div>
+                <div class="project-content">
+                    <h3 class="project-title">Urban Farming Initiative</h3>
+                    <p class="project-description">Transforming unused urban spaces into productive community gardens for fresh produce.</p>
+                    <div class="project-stats">
+                        <span>🏙️ 15 Locations</span>
+                        <span>🥬 5K+ Meals</span>
+                    </div>
                 </div>
             </div>
-
-            <!-- Step 3 -->
-            <div class="step">
-                <div class="step-media">
-                    <!-- متطوعين بشكل لطيف -->
-                    <img src="{{ url_for('static', filename='friendly-volunteers.png') }}" alt="Smiling volunteers">
-                </div>
-                <div class="step-content">
-                    <div class="step-tag">Step 3 · Human hands</div>
-                    <h3>Volunteers Take Action</h3>
-                    <p>
-                        Volunteers step in — organizing routes, packing bags, and delivering with a smile. They become the bridge between donors and families in need.
-                    </p>
-                    <div class="step-note">Kindness moves through people, not systems.</div>
+            
+            <div class="project-card">
+                <div class="project-image">📚</div>
+                <div class="project-content">
+                    <h3 class="project-title">Education Nutrition Program</h3>
+                    <p class="project-description">Providing nutritious meals to school children in underserved communities.</p>
+                    <div class="project-stats">
+                        <span>🎒 50 Schools</span>
+                        <span>🍎 10K Students</span>
+                    </div>
                 </div>
             </div>
-
-            <!-- Step 4 -->
-            <div class="step">
-                <div class="step-media">
-                    <!-- عائلة سعيدة بخطوط ناعمة -->
-                    <img src="{{ url_for('static', filename='happy-family-illustration.png') }}" alt="Happy family illustration">
-                </div>
-                <div class="step-content">
-                    <div class="step-tag">Step 4 · A door opens</div>
-                    <h3>A Family Supported</h3>
-                    <p>
-                        A family receives the food — not as charity, but as a gesture of shared humanity. Tonight, the table is full and hearts feel a little lighter.
-                    </p>
-                    <div class="step-note">A meal can’t fix everything, but it can fix this moment.</div>
-                </div>
-            </div>
-
-            <!-- Step 5 -->
-            <div class="step">
-                <div class="step-media">
-                    <!-- يمكنك استخدام قلب / ضوء / عائلة بشكل أكثر تجريدًا -->
-                    <img src="{{ url_for('static', filename='hope-light-illustration.png') }}" alt="Hope and light illustration">
-                </div>
-                <div class="step-content">
-                    <div class="step-tag">Step 5 · Beyond one plate</div>
-                    <h3>Hope That Spreads</h3>
-                    <p>
-                        The story doesn’t end with one delivery. Every act of kindness inspires another — building a community where giving is normal, and no one is left unseen.
-                    </p>
-                    <div class="step-note">This journey is made by many hands — including yours.</div>
-                </div>
-            </div>
-
         </div>
     </div>
-
-    <div class="closing-message">
-        <strong>4 Elements</strong> exists to make this journey easier, safer, and closer — for donors, volunteers, and every family that deserves a warm meal.
-    </div>
-
-    <script>
-        // Scroll Reveal Animation
-        const steps = document.querySelectorAll(".step");
-
-        function revealSteps() {
-            const trigger = window.innerHeight - 130;
-
-            steps.forEach(step => {
-                const rect = step.getBoundingClientRect();
-                if (rect.top < trigger) {
-                    step.classList.add("visible");
-                }
-            });
-        }
-
-        window.addEventListener("scroll", revealSteps);
-        window.addEventListener("load", revealSteps);
-    </script>
-
 </body>
-
 </html>

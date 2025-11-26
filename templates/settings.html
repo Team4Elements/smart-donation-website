@@ -1,14 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>Settings | 4 Elements</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green: #2e8f55;
+            --green-dark: #1e4d32;
+            --green-light: #e5f6eb;
+            --white: #ffffff;
+            --gray-light: #f4f7f6;
+            --text-dark: #243528;
+            --text-soft: #6e8577;
+            --radius: 20px;
+            --shadow: 0 6px 22px rgba(0, 0, 0, 0.06);
+        }
+        
+        body {
+            margin: 0;
+            background: var(--gray-light);
+            font-family: "Poppins", sans-serif;
+        }
+        
+        .navbar {
+            background: var(--white);
+            padding: 18px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--green-dark);
+            letter-spacing: 0.5px;
+        }
+        
+        .nav-links a {
+            margin-left: 28px;
+            text-decoration: none;
+            color: var(--text-soft);
+            font-weight: 500;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--green-dark);
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .settings-card {
+            background: var(--white);
+            padding: 36px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .settings-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 30px;
+        }
+        
+        .setting-item {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #e5ebe7;
+        }
+        
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+        
+        .setting-label {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+        
+        .setting-description {
+            font-size: 14px;
+            color: var(--text-soft);
+            margin-bottom: 12px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #b91c1c;
+        }
+    </style>
 </head>
-
 <body>
-    <h1>Hello {{ name }} — Settings Page</h1>
-    <p>Settings page is working 🎉</p>
+    <div class="navbar">
+        <div class="logo">4 Elements</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="{{ url_for('projects') }}">Projects</a>
+            <a href="{{ url_for('leaderboard') }}">Leaderboard</a>
+            <a href="{{ url_for('account') }}">Dashboard</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="settings-card">
+            <h1 class="settings-title">Account Settings</h1>
+            
+            <div class="setting-item">
+                <div class="setting-label">Notification Preferences</div>
+                <div class="setting-description">Manage how you receive notifications about your donations and volunteer work</div>
+                <button class="btn" style="background: var(--green-light); color: var(--green-dark);">
+                    Configure Notifications
+                </button>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-label">Privacy Settings</div>
+                <div class="setting-description">Control what information is visible on your public profile</div>
+                <button class="btn" style="background: var(--green-light); color: var(--green-dark);">
+                    Privacy Options
+                </button>
+            </div>
+            
+            <div class="setting-item">
+                <div class="setting-label">Delete Account</div>
+                <div class="setting-description">Permanently delete your account and all associated data</div>
+                <a href="{{ url_for('delete_account_page') }}" class="btn btn-danger">
+                    Delete My Account
+                </a>
+            </div>
+        </div>
+    </div>
 </body>
-
 </html>
