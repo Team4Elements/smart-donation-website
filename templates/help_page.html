@@ -3,177 +3,995 @@
 <head>
     <meta charset="UTF-8">
     <title>Help & Support | 4 Elements</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --green: #2e8f55;
-            --green-dark: #1e4d32;
+            --green: #21b15a;
+            --green-soft: #e6fbf0;
+            --green-soft-2: #f1fff7;
+            --green-dark: #067138;
             --white: #ffffff;
-            --gray-light: #f4f7f6;
-            --text-dark: #243528;
-            --radius: 16px;
-            --shadow: 0 6px 22px rgba(0, 0, 0, 0.08);
+            --gray-bg: #f6f7fb;
+            --gray-border: #e2e5ef;
+            --text-main: #222b3a;
+            --text-muted: #6b7280;
+            --radius-lg: 18px;
+            --radius-md: 12px;
+            --radius-pill: 999px;
+            --shadow-card: 0 18px 45px rgba(15, 23, 42, 0.12);
         }
-        
+
+        * { box-sizing: border-box; }
+
         body {
             margin: 0;
-            background: var(--gray-light);
             font-family: "Poppins", sans-serif;
+            background: var(--gray-bg);
+            color: var(--text-main);
         }
-        
+
+        /* NAVBAR */
         .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 20;
             background: var(--white);
-            padding: 18px 48px;
+            padding: 14px 60px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 10px rgba(15, 23, 42, .05);
         }
-        
-        .logo { font-weight: 700; color: var(--green-dark); font-size: 1.2rem; }
-        .nav-links a { margin-left: 20px; text-decoration: none; color: #555; font-weight: 500; }
-        .nav-links a.active { color: var(--green); }
-        
-        .container {
-            max-width: 1000px;
-            margin: 40px auto;
-            padding: 0 20px;
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        
-        .page-header {
+
+        .logo-square {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            background: var(--green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            font-size: 0.95rem;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 0.9rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4b5563;
+        }
+
+        .nav-links a:hover { color: var(--green-dark); }
+
+        .nav-auth {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 18px;
+        }
+
+        .btn-nav {
+            border-radius: var(--radius-pill);
+            border: 1px solid #d4d7e3;
+            padding: 6px 16px;
+            font-size: 0.8rem;
+            background: #fff;
+            cursor: pointer;
+            text-decoration: none;
+            color: #4b5563;
+        }
+
+        .btn-nav-primary {
+            border-color: transparent;
+            background: var(--green);
+            color: #fff;
+            box-shadow: 0 10px 25px rgba(6, 113, 56, .4);
+        }
+
+        .btn-nav-primary:hover { background: var(--green-dark); }
+
+        /* PAGE WRAPPER */
+        .page-wrapper {
+            max-width: 1100px;
+            margin: 0 auto 40px;
+            padding: 0 24px 48px;
+        }
+
+        /* HERO HEADER */
+        .hero-header {
+            background: linear-gradient(180deg, #dbfde8 0%, #f4fff9 60%, #ffffff 100%);
+            padding: 45px 0 60px;
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
         }
-        
-        .page-header h1 {
-            font-size: 2.5rem;
-            color: var(--green-dark);
-            margin-bottom: 10px;
-        }
-        
-        .faq-section {
-            background: var(--white);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 40px;
-            margin-bottom: 30px;
-        }
-        
-        .faq-item {
-            margin-bottom: 25px;
-            border-bottom: 1px solid #e5ebe7;
-            padding-bottom: 25px;
-        }
-        
-        .faq-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-        }
-        
-        .faq-question {
-            font-size: 1.2rem;
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+            background: var(--green);
+            color: #fff;
+            font-size: 0.8rem;
             font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
-        
+
+        .hero-title {
+            font-size: 2rem;
+            margin: 0 0 8px;
+            color: var(--text-main);
+        }
+
+        .hero-subtitle {
+            margin: 0;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+        }
+
+        .hero-tagline {
+            margin-top: 12px;
+            font-size: 0.8rem;
+            font-style: italic;
+            color: #111827;
+        }
+
+        .hero-search-wrapper {
+            margin-top: 26px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .hero-search {
+            width: 460px;
+            max-width: 100%;
+            position: relative;
+        }
+
+        .hero-search input {
+            width: 100%;
+            padding: 10px 16px 10px 38px;
+            border-radius: var(--radius-pill);
+            border: 1px solid #d4e3d9;
+            font-family: inherit;
+            font-size: 0.9rem;
+            outline: none;
+            background: #fff;
+            box-shadow: 0 3px 10px rgba(15, 23, 42, 0.08);
+        }
+
+        .hero-search input::placeholder { color: #9ca3af; }
+
+        .hero-search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            width: 13px;
+            height: 13px;
+            border-radius: 999px;
+            border: 2px solid #9ca3af;
+            transform: translateY(-50%);
+        }
+
+        .hero-search-icon::after {
+            content: "";
+            position: absolute;
+            width: 8px;
+            height: 2px;
+            background: #9ca3af;
+            border-radius: 999px;
+            right: -4px;
+            bottom: -3px;
+            transform: rotate(45deg);
+        }
+
+        .section { margin-bottom: 40px; }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.25rem;
+            margin-bottom: 6px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 26px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        /* HOW IT WORKS */
+        .card-service {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 26px 20px 20px;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+            text-align: center;
+        }
+
+        .icon-circle {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--green-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--green-dark);
+            font-size: 1.1rem;
+            margin: 0 auto 12px;
+        }
+
+        .card-service-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .card-service-text {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* QUICK LINKS */
+        .card-link {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 22px 18px 18px;
+            box-shadow: 0 14px 36px rgba(15, 23, 42, 0.07);
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .card-link-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-link-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .card-link-text {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .card-link a {
+            margin-top: 2px;
+            font-size: 0.78rem;
+            color: var(--green-dark);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .card-link a:hover { text-decoration: underline; }
+
+        /* FAQ */
+        .faq-wrapper {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 24px 22px 26px;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, .07);
+        }
+
+        .faq-header {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .faq-header h2 {
+            margin: 0 0 10px;
+            font-size: 1.2rem;
+        }
+
+        .faq-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+
+        .faq-tab {
+            padding: 6px 12px;
+            border-radius: var(--radius-pill);
+            border: 1px solid var(--gray-border);
+            font-size: 0.78rem;
+            background: #f9fafb;
+            color: #4b5563;
+            cursor: pointer;
+        }
+
+        .faq-tab.active {
+            background: var(--green);
+            border-color: var(--green);
+            color: #fff;
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        details.faq-item {
+            background: #f9fafb;
+            border-radius: var(--radius-md);
+            border: 1px solid #e5e7f0;
+            padding: 10px 14px;
+        }
+
+        details.faq-item[open] {
+            background: var(--green-soft-2);
+            border-color: #b9e5c6;
+        }
+
+        .faq-summary {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .faq-summary::-webkit-details-marker { display: none; }
+
+        .faq-question {
+            font-size: 0.88rem;
+            font-weight: 500;
+        }
+
+        .faq-arrow {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 1px solid #d0d4e5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #6b7280;
+        }
+
+        details[open] .faq-arrow {
+            background: var(--green);
+            border-color: var(--green);
+            color: #fff;
+        }
+
         .faq-answer {
-            color: #666;
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
             line-height: 1.6;
         }
-        
-        .contact-box {
-            background: var(--white);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 40px;
+
+        /* CONTACT SUPPORT */
+        .contact-section { margin-top: 40px; }
+
+        .contact-header {
             text-align: center;
-        }
-        
-        .contact-box h3 {
-            color: var(--green-dark);
             margin-bottom: 20px;
         }
-        
-        .btn {
-            display: inline-block;
-            padding: 12px 30px;
-            background: var(--green);
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: background 0.3s;
+
+        .contact-header h2 {
+            margin: 0 0 8px;
+            font-size: 1.2rem;
         }
-        
-        .btn:hover {
-            background: var(--green-dark);
+
+        .contact-header p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .grid-3-contact {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-bottom: 26px;
+        }
+
+        .contact-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 22px 18px 18px;
+            box-shadow: 0 18px 38px rgba(15, 23, 42, .08);
+            text-align: center;
+        }
+
+        .contact-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .contact-value {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .btn-contact {
+            display: inline-block;
+            padding: 7px 18px;
+            border-radius: var(--radius-pill);
+            border: none;
+            font-size: 0.78rem;
+            font-weight: 600;
+            background: var(--green);
+            color: #fff;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-contact:hover { background: var(--green-dark); }
+
+        .live-help-card {
+            background: linear-gradient(180deg, #e1fcef 0%, #f5fff9 100%);
+            border-radius: var(--radius-lg);
+            padding: 24px 22px 20px;
+            box-shadow: var(--shadow-card);
+            text-align: center;
+        }
+
+        .live-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--green);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 1.1rem;
+            margin: 0 auto 10px;
+        }
+
+        .live-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .live-text {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+        }
+
+        .btn-live {
+            display: inline-block;
+            width: 220px;
+            max-width: 100%;
+            padding: 8px 0;
+            border-radius: var(--radius-pill);
+            border: none;
+            background: var(--green);
+            color: #fff;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-live:hover { background: var(--green-dark); }
+
+        @media (max-width: 960px) {
+            .navbar { padding: 12px 18px; }
+            .nav-links { gap: 12px; }
+            .page-wrapper { padding: 0 16px 40px; }
+            .grid-3, .grid-3-contact { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 640px) {
+            .hero-header { padding: 32px 0 40px; }
+            .hero-title { font-size: 1.7rem; }
+            .nav-auth { display: none; }
         }
     </style>
 </head>
 <body>
+    <!-- NAVBAR -->
     <nav class="navbar">
-        <div class="logo">4 Elements</div>
+        <div class="nav-left">
+            <div class="logo-square">4</div>
+            <div class="logo-text">4ELEMENTS</div>
+        </div>
         <div class="nav-links">
             <a href="/">Home</a>
             <a href="{{ url_for('about') }}">About</a>
-            <a href="{{ url_for('projects') }}">Projects</a>
             <a href="{{ url_for('leaderboard') }}">Leaderboard</a>
-            {% if user %}
-                <a href="{{ url_for('account_donor') if user_type == 'donor' else url_for('account') }}">Dashboard</a>
-            {% else %}
-                <a href="/login_page">Login</a>
-            {% endif %}
+            <a href="{{ url_for('projects') }}">Projects</a>
+            <a href="{{ url_for('contact') }}">Contact</a>
+            <div class="nav-auth">
+                {% if not user %}
+                    <a class="btn-nav" href="/login_page">Login</a>
+                {% endif %}
+                {% if user %}
+                    <a class="btn-nav btn-nav-primary"
+                       href="{{ url_for('account_donor') if user_type == 'donor' else url_for('account') }}">
+                        Dashboard
+                    </a>
+                {% endif %}
+            </div>
         </div>
     </nav>
 
-    <div class="container">
-        <div class="page-header">
-            <h1>Help & Support</h1>
-            <p>Find answers to common questions and get the help you need</p>
+    <!-- HERO HEADER -->
+    <header class="hero-header">
+        <div class="hero-badge">
+            <span>4ELEMENTS</span>
         </div>
-        
-        <div class="faq-section">
-            <h2 style="color: var(--green-dark); margin-bottom: 30px;">Frequently Asked Questions</h2>
-            
-            <div class="faq-item">
-                <div class="faq-question">How do I start donating food?</div>
-                <div class="faq-answer">
-                    Visit the "Donate Food" section from your dashboard, browse current needs from food banks, 
-                    and make a donation promise. The food bank will review and confirm your donation.
-                </div>
-            </div>
-            
-            <div class="faq-item">
-                <div class="faq-question">How does the points system work?</div>
-                <div class="faq-answer">
-                    You earn points for every donation: 1 point per €1 donated, 2 points per food item, 
-                    and 5 points per volunteer hour. Points help you level up and earn badges!
-                </div>
-            </div>
-            
-            <div class="faq-item">
-                <div class="faq-question">Can I volunteer remotely?</div>
-                <div class="faq-answer">
-                    Yes! Many food banks need help with administrative tasks, social media, 
-                    and coordination that can be done remotely. Check the volunteer opportunities for remote options.
-                </div>
-            </div>
-            
-            <div class="faq-item">
-                <div class="faq-question">How do I reset my password?</div>
-                <div class="faq-answer">
-                    Click "Forgot Password" on the login page, enter your email, and follow the 
-                    instructions sent to your inbox to reset your password.
-                </div>
+        <h1 class="hero-title">Help &amp; Support</h1>
+        <p class="hero-subtitle">
+            Find answers to common questions and get the help you need
+        </p>
+        <p class="hero-tagline">
+            Turning surplus into support. Together, we build a world where no plate is empty and no family is forgotten.
+        </p>
+
+        <div class="hero-search-wrapper">
+            <div class="hero-search">
+                <span class="hero-search-icon" aria-hidden="true"></span>
+                <input id="helpSearch" type="text" placeholder="Search for help..." />
             </div>
         </div>
-        
-        <div class="contact-box">
-            <h3>Still need help?</h3>
-            <p>Our support team is here to assist you with any questions or issues.</p>
-            <a href="{{ url_for('contact') }}" class="btn">Contact Support</a>
-        </div>
-    </div>
+    </header>
+
+    <main class="page-wrapper">
+
+        <!-- HOW IT WORKS -->
+        <section class="section">
+            <h2 class="section-title">How 4elements Works</h2>
+            <p class="section-subtitle">
+                Our platform connects donors with those in need through three simple ways to contribute.
+            </p>
+            <div class="grid-3">
+                <div class="card-service">
+                    <div class="icon-circle">$</div>
+                    <div class="card-service-title">Donate Money</div>
+                    <div class="card-service-text">
+                        Make secure financial contributions that directly help those in need. Track your impact through
+                        your dashboard and earn points for every donation.
+                    </div>
+                </div>
+                <div class="card-service">
+                    <div class="icon-circle">📍</div>
+                    <div class="card-service-title">Donate Food</div>
+                    <div class="card-service-text">
+                        Register your store on our interactive map to share surplus food with your community. Your
+                        location helps people find food donations nearby.
+                    </div>
+                </div>
+                <div class="card-service">
+                    <div class="icon-circle">⏱</div>
+                    <div class="card-service-title">Volunteer Time</div>
+                    <div class="card-service-text">
+                        Share your time and skills to make a difference. Choose your hours, track your contributions,
+                        and climb the leaderboard while helping others.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- QUICK LINKS -->
+        <section class="section">
+            <h2 class="section-title">Quick Links</h2>
+            <div class="grid-3">
+                <div class="card-link">
+                    <div class="card-link-header">
+                        <div class="icon-circle">$</div>
+                        <div>
+                            <div class="card-link-title">Make a Donation</div>
+                            <div class="card-link-text">
+                                Contribute money to help those in need.
+                            </div>
+                        </div>
+                    </div>
+                    <!-- uses /donate/select-bank -->
+                    <a href="{{ url_for('select_bank_money') }}">Go to Donate Money</a>
+                </div>
+
+                <div class="card-link">
+                    <div class="card-link-header">
+                        <div class="icon-circle">📍</div>
+                        <div>
+                            <div class="card-link-title">Donate Food</div>
+                            <div class="card-link-text">
+                                Add your store location to the map or respond to food requests.
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /donate/food -->
+                    <a href="{{ url_for('donate_food') }}">Go to Donate Food</a>
+                </div>
+
+                <div class="card-link">
+                    <div class="card-link-header">
+                        <div class="icon-circle">🤝</div>
+                        <div>
+                            <div class="card-link-title">Volunteer</div>
+                            <div class="card-link-text">
+                                Share your time and skills through volunteer opportunities.
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /donate/time -->
+                    <a href="{{ url_for('donate_time') }}">See Volunteer Opportunities</a>
+                </div>
+
+                <div class="card-link">
+                    <div class="card-link-header">
+                        <div class="icon-circle">📊</div>
+                        <div>
+                            <div class="card-link-title">View Dashboard</div>
+                            <div class="card-link-text">
+                                Track your contributions, points and progress.
+                            </div>
+                        </div>
+                    </div>
+                    {% if user %}
+                        <a href="{{ url_for('account_donor') if user_type == 'donor' else url_for('account') }}">
+                            Open Dashboard
+                        </a>
+                    {% else %}
+                        <a href="/login_page">Log in to view dashboard</a>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="section">
+            <div class="faq-wrapper">
+                <div class="faq-header">
+                    <h2>Frequently Asked Questions</h2>
+                </div>
+
+                <!-- FILTER TABS -->
+                <div class="faq-tabs">
+                    <button class="faq-tab active" data-category="all">All Topics</button>
+                    <button class="faq-tab" data-category="donations">Money Donations</button>
+                    <button class="faq-tab" data-category="food">Food Donations</button>
+                    <button class="faq-tab" data-category="volunteer">Volunteering</button>
+                    <button class="faq-tab" data-category="points">Points &amp; Rewards</button>
+                    <button class="faq-tab" data-category="dashboard">Dashboard</button>
+                    <button class="faq-tab" data-category="leaderboard">Leaderboard</button>
+                    <button class="faq-tab" data-category="account">Account</button>
+                </div>
+
+                <!-- FAQ ITEMS -->
+                <div class="faq-list">
+                    <!-- donations -->
+                    <details class="faq-item" data-category="donations" open>
+                        <summary class="faq-summary">
+                            <span class="faq-question">How do I start donating money?</span>
+                            <span class="faq-arrow">⌄</span>
+                        </summary>
+                        <div class="faq-answer">
+                            Click the <strong>"Start Donating"</strong> button on the home page or navigate to the
+                            Donations section. Enter the amount you wish to donate, select your payment method,
+                            and confirm your contribution. You'll receive a confirmation email and points will be
+                            added to your account.
+                        </div>
+                    </details>
+
+                    <details class="faq-item" data-category="donations">
+                        <summary class="faq-summary">
+                            <span class="faq-question">What payment methods do you accept?</span>
+                            <span class="faq-arrow">⌄</span>
+                        </summary>
+                        <div class="faq-answer">
+                            We accept all major credit cards (Visa, MasterCard, American Express), debit cards, PayPal,
+                            and bank transfers. All transactions are secure and encrypted for your safety.
+                        </div>
+                    </details>
+
+                    <details class="faq-item" data-category="donations">
+                        <summary class="faq-summary">
+                            <span class="faq-question">Can I set up recurring donations?</span>
+                            <span class="faq-arrow">⌄</span>
+                        </summary>
+                        <div class="faq-answer">
+                            Yes! When making a donation, you can choose to make it recurring on a weekly, monthly,
+                            or yearly basis. You can manage or cancel recurring donations anytime from your
+                            account dashboard.
+                        </div>
+                    </details>
+
+                    <!-- food -->
+                    <details class="faq-item" data-category="food">
+                        <summary class="faq-summary">
+                            <span class="faq-question">How do I donate food from my store?</span>
+                            <span class="faq-arrow">⌄</span>
+                        </summary>
+                        <div class="faq-answer">
+                            Visit the <strong>"Donate Food"</strong> section from your dashboard. Enter your store
+                            details and location, then mark your store on the map. Your location will appear on
+                            the main map on the home page, making it easy for those in need to find food donations
+                            near them.
+                        </div>
+                    </details>
+
+                    <details class="faq-item" data-category="food">
+                        <summary class="faq-summary">
+                            <span class="faq-question">What types of food can I donate?</span>
+                            <span class="faq-arrow">⌄</span>
+                        </summary>
+                        <div class="faq-answer">
+                            You can donate non-perishable items, fresh produce, packaged goods, and prepared meals.
+                            Please ensure all food items meet safety standards and are within their expiration dates.
+                            Contact our support team if you have questions about specific items.
+                        </div>
+                    </details>
+
+                    <details class="faq-item" data-category="food">
+                        <summary class="faq-summary">
+                            <span class="faq-question">How does the map location work?</span>
+                            <span class="faq-arrow">⌄</span>
+                        </summary>
+                        <div class="faq-answer">
+                            When you register your store for food donations, you'll place a pin on the interactive map.
+                            This pin shows your exact location, operating hours, and available food types.
+                            Users can click on your pin to see more details and get directions.
+                        </div>
+                    </details>
+
+                    <!-- volunteer -->
+                    <details class="faq-item" data-category="volunteer">
+                        <summary class="faq-summary">
+                            <span class="faq-question">How can I volunteer my time?</span>
+                            <span class="faq-arrow">⌄</span>
+                        </summary>
+                        <div class="faq-answer">
+                            Navigate to the <strong>"Volunteer"</strong> section in your account. You can browse
+                            available opportunities, select the ones that interest you, and specify how many hours
+                            you'd like to commit. Each hour volunteered earns you points and contributes to the
+                            leaderboard.
+                        </div>
+                    </details>
+
+                    <details class="faq-item" data-category="volunteer">
+                        <summary class="faq-summary">
+                            <span class="faq-question">What volunteer opportunities are available?</span>
+                            <span class="faq-arrow">⌄</span>
+                        </summary>
+                        <div class="faq-answer">
+                            Opportunities include food sorting and distribution, administrative tasks, social media
+                            support, event coordination, delivery assistance, and community outreach. Check the
+                            volunteer section regularly as new opportunities are added weekly.
+                        </div>
+                    </details>
+
+                    <details class="faq-item" data-category="volunteer">
+                        <summary class="faq-summary">
+                            <span class="faq-question">Can I volunteer remotely?</span>
+                            <span class="faq-arrow">⌄</span>
+                        </summary>
+                        <div class="faq-answer">
+                            Yes! Many tasks can be done remotely, including administrative support, social media
+                            management, and coordination work. Filter volunteer opportunities by "Remote" to see
+                            available options.
+                        </div>
+                    </details>
+
+                    <!-- points -->
+                    <details class="faq-item" data-category="points">
+                        <summary class="faq-summary">
+                            <span class="faq-question">How does the points system work?</span>
+                            <span class="faq-arrow">⌄</span>
+                        </summary>
+                        <div class="faq-answer">
+                            You earn points for every donation (1 point per $1 donated), food donations (points based
+                            on value), and volunteer hours (5 points per hour). Points are displayed on your dashboard
+                            and contribute to your position on the leaderboard.
+                        </div>
+                    </details>
+
+                    <details class="faq-item" data-category="points">
+                        <summary class="faq-summary">
+                            <span class="faq-question">What can I do with my points?</span>
+                            <span class="faq-arrow">⌄</span>
+                        </summary>
+                        <div class="faq-answer">
+                            Points showcase your contribution to the community and improve your ranking on the
+                            leaderboard. High-performing contributors receive recognition badges, certificates,
+                            and may be featured in our monthly newsletter.
+                        </div>
+                    </details>
+
+                    <!-- dashboard -->
+                    <details class="faq-item" data-category="dashboard">
+                        <summary class="faq-summary">
+                            <span class="faq-question">How do I access my account dashboard?</span>
+                            <span class="faq-arrow">⌄</span>
+                        </summary>
+                        <div class="faq-answer">
+                            Click on the <strong>"Dashboard"</strong> button in the top navigation bar.
+                            Your dashboard displays your total donations (money and food), volunteer hours,
+                            points earned, badges, and your current leaderboard position.
+                        </div>
+                    </details>
+
+                    <details class="faq-item" data-category="dashboard">
+                        <summary class="faq-summary">
+                            <span class="faq-question">Can I track my donation history?</span>
+                            <span class="faq-arrow">⌄</span>
+                        </summary>
+                        <div class="faq-answer">
+                            Yes! Your dashboard includes a complete history of all your contributions, including money
+                            donations, food donations, and volunteer hours. You can filter by date range and export
+                            your data for tax purposes.
+                        </div>
+                    </details>
+
+                    <!-- leaderboard -->
+                    <details class="faq-item" data-category="leaderboard">
+                        <summary class="faq-summary">
+                            <span class="faq-question">How does the leaderboard work?</span>
+                            <span class="faq-arrow">⌄</span>
+                        </summary>
+                        <div class="faq-answer">
+                            The leaderboard ranks individuals and organizations based on their total points earned.
+                            It's updated in real-time and can be filtered to show daily, weekly, monthly, or
+                            all-time top contributors. Both individuals and organizations have separate leaderboards.
+                        </div>
+                    </details>
+
+                    <details class="faq-item" data-category="leaderboard">
+                        <summary class="faq-summary">
+                            <span class="faq-question">How can I improve my leaderboard ranking?</span>
+                            <span class="faq-arrow">⌄</span>
+                        </summary>
+                        <div class="faq-answer">
+                            Increase your ranking by making regular donations, volunteering more hours, and encouraging
+                            others to join 4elements. Organizations can coordinate team efforts to climb the
+                            organizational leaderboard.
+                        </div>
+                    </details>
+
+                    <!-- account -->
+                    <details class="faq-item" data-category="account">
+                        <summary class="faq-summary">
+                            <span class="faq-question">How do I reset my password?</span>
+                            <span class="faq-arrow">⌄</span>
+                        </summary>
+                        <div class="faq-answer">
+                            Click "Login" in the top right, then select <strong>"Forgot Password"</strong>.
+                            Enter your email address and follow the instructions sent to your inbox to reset
+                            your password securely.
+                        </div>
+                    </details>
+
+                    <details class="faq-item" data-category="account">
+                        <summary class="faq-summary">
+                            <span class="faq-question">Can organizations create accounts?</span>
+                            <span class="faq-arrow">⌄</span>
+                        </summary>
+                        <div class="faq-answer">
+                            Absolutely! Organizations can register for a dedicated account with additional features
+                            like team management, bulk food donation coordination, and enhanced analytics.
+                            Contact our team for organizational account setup.
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT SUPPORT -->
+        <section class="contact-section">
+            <div class="contact-header">
+                <h2>Contact Our Support Team</h2>
+                <p>We’re here to help! Reach out to us through any of these channels.</p>
+            </div>
+
+            <div class="grid-3-contact">
+                <div class="contact-card">
+                    <div class="icon-circle">✉️</div>
+                    <div class="contact-label">Email Us</div>
+                    <div class="contact-value">help@4elements.org</div>
+                    <a class="btn-contact" href="mailto:help@4elements.org">Send Email</a>
+                </div>
+                <div class="contact-card">
+                    <div class="icon-circle">📞</div>
+                    <div class="contact-label">Call Us</div>
+                    <div class="contact-value">+31 6 12 345 78</div>
+                    <a class="btn-contact" href="tel:+3161234578">Call Now</a>
+                </div>
+                <div class="contact-card">
+                    <div class="icon-circle">📍</div>
+                    <div class="contact-label">Visit Us</div>
+                    <div class="contact-value">Amsterdam, Netherlands</div>
+                    <a class="btn-contact" href="https://maps.google.com" target="_blank">Get Directions</a>
+                </div>
+            </div>
+
+            <div class="live-help-card">
+                <div class="live-icon">💬</div>
+                <div class="live-title">Need Immediate Help?</div>
+                <div class="live-text">
+                    Chat with our support team in real-time. We're available Monday to Friday, 9am–5pm CET.
+                </div>
+                <a class="btn-live" href="{{ url_for('contact') }}">Start Live Chat</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- JS FOR FILTER + SEARCH -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchInput = document.getElementById("helpSearch");
+            const faqItems = Array.from(document.querySelectorAll(".faq-item"));
+            const tabs = Array.from(document.querySelectorAll(".faq-tab"));
+
+            let activeCategory = "all";
+
+            // Prepare searchable text
+            faqItems.forEach(item => {
+                item.dataset.search = item.innerText.toLowerCase();
+            });
+
+            function applyFilters() {
+                const query = (searchInput.value || "").toLowerCase().trim();
+
+                faqItems.forEach(item => {
+                    const cat = item.dataset.category;
+                    const text = item.dataset.search;
+                    const matchCategory = activeCategory === "all" || cat === activeCategory;
+                    const matchSearch = !query || text.includes(query);
+                    item.style.display = matchCategory && matchSearch ? "block" : "none";
+                });
+            }
+
+            // Tabs click
+            tabs.forEach(tab => {
+                tab.addEventListener("click", () => {
+                    tabs.forEach(t => t.classList.remove("active"));
+                    tab.classList.add("active");
+                    activeCategory = tab.dataset.category;
+                    applyFilters();
+                });
+            });
+
+            // Search input
+            if (searchInput) {
+                searchInput.addEventListener("input", applyFilters);
+            }
+        });
+    </script>
 </body>
 </html>
