@@ -707,9 +707,39 @@ def geocode(address: str):
 # ==============================================================
 @app.route("/")
 def home():
-    user = session.get("user")
+
+
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+
+    
+
+    # Meals saved
+    c.execute("SELECT COALESCE(SUM(quantity), 0) FROM donations WHERE donation_type='food' AND status='completed'")
+    meals_saved = c.fetchone()[0]
+
+    # Donors
+    c.execute("SELECT COUNT(*) FROM donors")
+    total_donors = c.fetchone()[0]
+
+    # Volunteers
+    c.execute("SELECT COUNT(DISTINCT user_id) FROM volunteer_applications WHERE status='completed'")
+    total_volunteers = c.fetchone()[0]
+
+    conn.close()
+
+    user = session.get("user") 
     user_type = session.get("user_type")
-    return render_template("index.html", user=user, user_type=user_type)
+
+    return render_template(
+        "index.html",
+        meals_saved=meals_saved,
+        donors=total_donors,
+        volunteers=total_volunteers,
+        user=user,
+        user_type=user_type
+    )
+
 
 
 @app.route("/about")
@@ -2170,6 +2200,8 @@ def volunteer_apply(request_id):
     conn.close()
     
     return render_template('volunteer_apply.html', request_id=request_id, req=req)
+
+
 
 # ==============================================================
 # 🚀 START APP

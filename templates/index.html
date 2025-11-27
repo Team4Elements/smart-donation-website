@@ -108,7 +108,7 @@
 
         <!-- Current Impact -->
         <div class="current_impact-header fade-in">
-            <h2>Current Impact</h2>
+            <h2>Current Impact</h2> 
             <p>See how your contributions are making a difference.</p>
         </div>
 
@@ -116,17 +116,17 @@
             <div class="current_impact-card">
                 <i class="fa-solid fa-utensils"></i>
                 <h3>Meals Saved</h3>
-                <p class="count" data-target="12345">0</p>
+                <p class="count" data-target="{{ meals_saved }}">{{ meals_saved }}</p>
             </div>
             <div class="current_impact-card">
                 <i class="fa-solid fa-hand-holding-dollar"></i>
                 <h3>Donors</h3>
-                <p class="count" data-target="678">0</p>
+                 <p class="count" data-target="{{ donors }}">{{ donors }}</p>
             </div>
             <div class="current_impact-card">
                 <i class="fa-solid fa-users"></i>
                 <h3>Volunteers</h3>
-                <p class="count" data-target="150">0</p>
+                <p class="count" data-target="{{ volunteers }}">{{ volunteers }}</p>
             </div>
         </div>
 
@@ -166,6 +166,27 @@
                         .bindPopup(`<b>${bank.name}</b><br>${bank.address}`);
                 });
             });
+    </script>
+
+    <script>
+        const faders = document.querySelectorAll('.fade-in');
+
+        const appearOptions = {
+            threshold: 0.2,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+            entries.forEach(entry => {
+                if(!entry.isIntersecting) return;
+                entry.target.classList.add('visible');
+                appearOnScroll.unobserve(entry.target);
+            });
+        }, appearOptions);
+
+        faders.forEach(fader => {
+            appearOnScroll.observe(fader);
+        });
     </script>
 
     {% include 'footer.html' %}
