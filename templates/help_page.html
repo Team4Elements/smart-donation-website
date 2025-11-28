@@ -220,83 +220,175 @@
             margin-bottom: 26px;
         }
 
-        .grid-3 {
+        .sub-heading-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 12px;
+        }
+
+        .sub-heading {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--green-dark);
+        }
+
+        .sub-heading-note {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* GRIDS */
+        .help-grid {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 18px;
         }
 
-        /* HOW IT WORKS */
-        .card-service {
-            background: var(--white);
+        .help-grid-links {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+            margin-top: 16px;
+        }
+
+        /* BASE CARD */
+        .help-card {
             border-radius: var(--radius-lg);
-            padding: 26px 20px 20px;
-            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
-            text-align: center;
+            padding: 22px 20px 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
         }
 
-        .icon-circle {
-            width: 42px;
-            height: 42px;
+        .help-card::after {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
             border-radius: 50%;
-            background: var(--green-soft);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--green-dark);
-            font-size: 1.1rem;
-            margin: 0 auto 12px;
+            background: rgba(255, 255, 255, 0.12);
+            right: -60px;
+            bottom: -80px;
+            pointer-events: none;
         }
 
-        .card-service-title {
+        .help-card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .help-card-title {
             font-size: 0.95rem;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
-        .card-service-text {
+        .help-card-text {
             font-size: 0.8rem;
-            color: var(--text-muted);
             line-height: 1.5;
         }
 
-        /* QUICK LINKS */
-        .card-link {
-            background: var(--white);
-            border-radius: var(--radius-lg);
-            padding: 22px 18px 18px;
-            box-shadow: 0 14px 36px rgba(15, 23, 42, 0.07);
-            text-align: left;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .card-link-header {
-            display: flex;
+        .help-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 999px;
+            display: inline-flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            font-size: 1rem;
+            margin-bottom: 8px;
         }
 
-        .card-link-title {
-            font-size: 0.9rem;
+        .help-list {
+            margin: 8px 0 0 18px;
+            padding: 0;
+        }
+
+        .help-list li {
+            margin-bottom: 4px;
+        }
+
+        /* DARK GREEN VARIANTS – visitor info */
+        .help-card--dark {
+            color: #ffffff;
+        }
+
+        .help-card--dark .help-card-text {
+            opacity: 0.96;
+        }
+
+        .help-card--dark a {
+            color: #f9fafb;
+            font-size: 0.78rem;
             font-weight: 600;
-        }
-
-        .card-link-text {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-        }
-
-        .card-link a {
-            margin-top: 2px;
-            font-size: 0.78rem;
-            color: var(--green-dark);
             text-decoration: none;
-            font-weight: 500;
+            display: inline-block;
+            margin-top: 8px;
         }
 
-        .card-link a:hover { text-decoration: underline; }
+        .help-card--dark a:hover {
+            text-decoration: underline;
+        }
+
+        .help-card--soft-green {
+            background: linear-gradient(135deg, #166534, #22c55e);
+        }
+
+        .help-card--emerald {
+            background: linear-gradient(135deg, #065f46, #10b981);
+        }
+
+        .help-card--orange {
+            background: linear-gradient(135deg, #b45309, #f97316);
+        }
+
+        .help-card--dark .help-icon {
+            background: rgba(255, 255, 255, 0.18);
+            color: #ffffff;
+        }
+
+        /* LIGHT GREEN VARIANTS – quick links */
+        .help-card--light {
+            background: linear-gradient(135deg, #e9fdf2, #bbf7d0);
+            color: #064e3b;
+            box-shadow: 0 14px 32px rgba(22, 163, 74, 0.18);
+        }
+
+        .help-card--light::after {
+            background: rgba(34, 197, 94, 0.15);
+        }
+
+        .help-card--light .help-icon {
+            background: rgba(22, 163, 74, 0.12);
+            color: #16a34a;
+        }
+
+        .help-card--light a {
+            color: #047857;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 8px;
+        }
+
+        .help-card--light a:hover {
+            text-decoration: underline;
+        }
+
+        /* Slight shade variations so cards don't look identical */
+        .help-card--light-1 { background: linear-gradient(135deg, #ecfdf5, #bbf7d0); }
+        .help-card--light-1::after { background: rgba(22, 163, 74, 0.14); }
+
+        .help-card--light-2 { background: linear-gradient(135deg, #f0fdf4, #a7f3d0); }
+        .help-card--light-2::after { background: rgba(34, 197, 94, 0.18); }
+
+        .help-card--light-3 { background: linear-gradient(135deg, #e9fdf2, #a5f3fc); }
+        .help-card--light-3::after { background: rgba(45, 212, 191, 0.18); }
+
+        .help-card--light-4 { background: linear-gradient(135deg, #ecfdf5, #bef264); }
+        .help-card--light-4::after { background: rgba(132, 204, 22, 0.18); }
 
         /* FAQ */
         .faq-wrapper {
@@ -514,7 +606,11 @@
             .navbar { padding: 12px 18px; }
             .nav-links { gap: 12px; }
             .page-wrapper { padding: 0 16px 40px; }
-            .grid-3, .grid-3-contact { grid-template-columns: 1fr; }
+            .help-grid,
+            .help-grid-links,
+            .grid-3-contact {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 640px) {
@@ -574,104 +670,121 @@
 
     <main class="page-wrapper">
 
-        <!-- HOW IT WORKS -->
+        <!-- VISITOR INFORMATION (dark green cards) -->
         <section class="section">
-            <h2 class="section-title">How 4elements Works</h2>
-            <p class="section-subtitle">
-                Our platform connects donors with those in need through three simple ways to contribute.
-            </p>
-            <div class="grid-3">
-                <div class="card-service">
-                    <div class="icon-circle">$</div>
-                    <div class="card-service-title">Donate Money</div>
-                    <div class="card-service-text">
-                        Make secure financial contributions that directly help those in need. Track your impact through
-                        your dashboard and earn points for every donation.
-                    </div>
-                </div>
-                <div class="card-service">
-                    <div class="icon-circle">📍</div>
-                    <div class="card-service-title">Donate Food</div>
-                    <div class="card-service-text">
-                        Register your store on our interactive map to share surplus food with your community. Your
-                        location helps people find food donations nearby.
-                    </div>
-                </div>
-                <div class="card-service">
-                    <div class="icon-circle">⏱</div>
-                    <div class="card-service-title">Volunteer Time</div>
-                    <div class="card-service-text">
-                        Share your time and skills to make a difference. Choose your hours, track your contributions,
-                        and climb the leaderboard while helping others.
-                    </div>
-                </div>
+            <div class="sub-heading-row">
+                <div class="sub-heading">Visitor Information</div>
+                <div class="sub-heading-note">For people who are using a food bank for the first time</div>
             </div>
-        </section>
 
-        <!-- QUICK LINKS -->
-        <section class="section">
-            <h2 class="section-title">Quick Links</h2>
-            <div class="grid-3">
-                <div class="card-link">
-                    <div class="card-link-header">
-                        <div class="icon-circle">$</div>
-                        <div>
-                            <div class="card-link-title">Make a Donation</div>
-                            <div class="card-link-text">
-                                Contribute money to help those in need.
-                            </div>
+            <div class="help-grid">
+
+                <div class="help-card help-card--dark help-card--soft-green">
+                    <div class="help-card-content">
+                        <div class="help-icon">?</div>
+                        <div class="help-card-title">First Time Visiting?</div>
+                        <div class="help-card-text">
+                            If this is your first time at a food bank, no worries — you're welcome, and you're not alone.
+                            <ul class="help-list">
+                                <li>Bring ID (if possible)</li>
+                                <li>Bring reusable bags for food</li>
+                                <li>Check opening hours before you go</li>
+                            </ul>
                         </div>
                     </div>
-                    <!-- uses /donate/select-bank -->
-                    <a href="{{ url_for('select_bank_money') }}">Go to Donate Money</a>
                 </div>
 
-                <div class="card-link">
-                    <div class="card-link-header">
-                        <div class="icon-circle">📍</div>
-                        <div>
-                            <div class="card-link-title">Donate Food</div>
-                            <div class="card-link-text">
-                                Add your store location to the map or respond to food requests.
-                            </div>
+                <div class="help-card help-card--dark help-card--emerald">
+                    <div class="help-card-content">
+                        <div class="help-icon">📍</div>
+                        <div class="help-card-title">Food Bank Locations</div>
+                        <div class="help-card-text">
+                            <strong>MBZ</strong><br>
+                            Christiaan de Wetstraat 1091 NJ
+                            <br><br>
+                            <strong>Layan</strong><br>
+                            6429 Winder Oaks Blvd Amsterdam
+                            <br><br>
+                            <strong>Layan</strong><br>
+                            6 Al Woroud, Ad Doqi, Dokki
                         </div>
                     </div>
-                    <!-- /donate/food -->
-                    <a href="{{ url_for('donate_food') }}">Go to Donate Food</a>
                 </div>
 
-                <div class="card-link">
-                    <div class="card-link-header">
-                        <div class="icon-circle">🤝</div>
-                        <div>
-                            <div class="card-link-title">Volunteer</div>
-                            <div class="card-link-text">
-                                Share your time and skills through volunteer opportunities.
-                            </div>
+                <div class="help-card help-card--dark help-card--orange">
+                    <div class="help-card-content">
+                        <div class="help-icon">⚡</div>
+                        <div class="help-card-title">Urgent Help</div>
+                        <div class="help-card-text">
+                            If you need immediate support, please contact your nearest food bank or emergency services.
+                            <br><br>
+                            Email: <strong>help@4elements.org</strong><br>
+                            Phone: <strong>+31 6 123 456 78</strong>
                         </div>
                     </div>
-                    <!-- /donate/time -->
-                    <a href="{{ url_for('donate_time') }}">See Volunteer Opportunities</a>
                 </div>
 
-                <div class="card-link">
-                    <div class="card-link-header">
-                        <div class="icon-circle">📊</div>
-                        <div>
-                            <div class="card-link-title">View Dashboard</div>
-                            <div class="card-link-text">
-                                Track your contributions, points and progress.
-                            </div>
+            </div>
+
+            <!-- QUICK LINKS TITLE -->
+            <div class="sub-heading-row" style="margin-top: 30px;">
+                <div class="sub-heading">Quick Links</div>
+                <div class="sub-heading-note">Shortcuts to the most important actions on the platform</div>
+            </div>
+
+            <!-- QUICK LINKS (light green cards) -->
+            <div class="help-grid-links">
+
+                <div class="help-card help-card--light help-card--light-1">
+                    <div class="help-card-content">
+                        <div class="help-icon">€</div>
+                        <div class="help-card-title">Make a Donation</div>
+                        <div class="help-card-text">
+                            Contribute money to help those in need. Secure payments and instant impact.
                         </div>
+                        <a href="{{ url_for('select_bank_money') }}">Go to Donate Money →</a>
                     </div>
-                    {% if user %}
-                        <a href="{{ url_for('account_donor') if user_type == 'donor' else url_for('account') }}">
-                            Open Dashboard
-                        </a>
-                    {% else %}
-                        <a href="/login_page">Log in to view dashboard</a>
-                    {% endif %}
                 </div>
+
+                <div class="help-card help-card--light help-card--light-2">
+                    <div class="help-card-content">
+                        <div class="help-icon">🍎</div>
+                        <div class="help-card-title">Donate Food</div>
+                        <div class="help-card-text">
+                            Add your store location to the map or respond to food requests from nearby food banks.
+                        </div>
+                        <a href="{{ url_for('donate_food') }}">Go to Donate Food →</a>
+                    </div>
+                </div>
+
+                <div class="help-card help-card--light help-card--light-3">
+                    <div class="help-card-content">
+                        <div class="help-icon">⏱</div>
+                        <div class="help-card-title">Volunteer Time</div>
+                        <div class="help-card-text">
+                            Share your time and skills. Choose when you help and track your hours.
+                        </div>
+                        <a href="{{ url_for('donate_time') }}">See Volunteer Opportunities →</a>
+                    </div>
+                </div>
+
+                <div class="help-card help-card--light help-card--light-4">
+                    <div class="help-card-content">
+                        <div class="help-icon">📊</div>
+                        <div class="help-card-title">View Dashboard</div>
+                        <div class="help-card-text">
+                            Track your donations, points and progress in one place.
+                        </div>
+                        {% if user %}
+                            <a href="{{ url_for('account_donor') if user_type == 'donor' else url_for('account') }}">
+                                Open Dashboard →
+                            </a>
+                        {% else %}
+                            <a href="/login_page">Log in to view dashboard →</a>
+                        {% endif %}
+                    </div>
+                </div>
+
             </div>
         </section>
 
@@ -921,19 +1034,19 @@
 
             <div class="grid-3-contact">
                 <div class="contact-card">
-                    <div class="icon-circle">✉️</div>
+                    <div class="help-icon" style="background: var(--green-soft); color: var(--green-dark);">✉️</div>
                     <div class="contact-label">Email Us</div>
                     <div class="contact-value">help@4elements.org</div>
                     <a class="btn-contact" href="mailto:help@4elements.org">Send Email</a>
                 </div>
                 <div class="contact-card">
-                    <div class="icon-circle">📞</div>
+                    <div class="help-icon" style="background: var(--green-soft); color: var(--green-dark);">📞</div>
                     <div class="contact-label">Call Us</div>
                     <div class="contact-value">+31 6 12 345 78</div>
                     <a class="btn-contact" href="tel:+3161234578">Call Now</a>
                 </div>
                 <div class="contact-card">
-                    <div class="icon-circle">📍</div>
+                    <div class="help-icon" style="background: var(--green-soft); color: var(--green-dark);">📍</div>
                     <div class="contact-label">Visit Us</div>
                     <div class="contact-value">Amsterdam, Netherlands</div>
                     <a class="btn-contact" href="https://maps.google.com" target="_blank">Get Directions</a>
