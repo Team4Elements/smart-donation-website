@@ -1,74 +1,238 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Donate Food</title>
-    <!-- We link to the main CSS but will add local overrides -->
+    <title>Donate Food | 4 Elements</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        body { background: #f7f7ff; }
-        .content-wrapper { max-width: 900px; margin: 50px auto; padding: 40px; background: #fff; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
-        h1, h2 { color: var(--dark-green); text-align: center; margin-bottom: 20px; }
-        .item-list, .location-list { list-style: none; padding: 0; }
-        .item-list li, .location-list li { background: #f9f9f9; border-left: 5px solid var(--main-green); margin-bottom: 10px; padding: 15px; border-radius: 8px; }
-        .item-list strong { color: var(--dark-green); }
-        .urgency-High { color: #d9534f; font-weight: bold; }
-        .urgency-Medium { color: #f0ad4e; font-weight: bold; }
-
-        /* ✅ START: LOCAL BUTTON STYLES */
-        .btn {
-            padding: 10px 28px;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: 600;
+        body {
+            background: #f4faf6;
+            font-family: "Poppins", sans-serif;
+            margin: 0;
+            padding-bottom: 60px;
+        }
+        /* NAVBAR */
+        
+        .navbar {
+            width: 100%;
+            height: 70px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2e8f55;
+        }
+        
+        .nav-links a {
+            margin-left: 20px;
+            color: #385a48;
+            font-weight: 500;
             text-decoration: none;
-            transition: 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: #2e8f55;
+        }
+        
+        .back-btn {
+            background: #2e8f55;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        
+        .container {
+            width: 92%;
+            max-width: 900px;
+            margin: auto;
+            margin-top: 35px;
+        }
+        
+        h2 {
+            text-align: center;
+            color: #2e8f55;
+            margin-bottom: 8px;
+        }
+        
+        p.subtitle {
+            text-align: center;
+            color: #6c8f7c;
+            margin-bottom: 30px;
+            font-size: 15px;
+        }
+        /* ITEM CARD */
+        
+        .item-card {
+            background: #fff;
+            padding: 22px 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+            margin-bottom: 20px;
+            border-left: 6px solid #2e8f55;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .item-info h3 {
+            margin: 0;
+            font-size: 20px;
+            color: #2e8f55;
+        }
+        
+        .item-info p {
+            margin: 8px 0;
+            color: #6d8f7a;
+            font-size: 14px;
+        }
+        
+        .urgency-tag {
             display: inline-block;
+            padding: 6px 14px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 12px;
+            color: white;
         }
-        .btn.secondary {
-            background: transparent;
-            border: 2px solid var(--dark-green);
-            color: var(--dark-green);
-            padding: 10px 33px; /* Match height */
+        
+        .Low {
+            background: #70c76b;
         }
-        .btn.secondary:hover {
-            background: var(--dark-green);
-            color: #fff;
-            transform: scale(1.05);
+        
+        .Medium {
+            background: #f1c232;
         }
-        /* ✅ END: LOCAL BUTTON STYLES */
-
+        
+        .High {
+            background: #e67e22;
+        }
+        
+        .Critical {
+            background: #e74c3c;
+        }
+        
+        .donate-btn {
+            padding: 12px 20px;
+            background: #2e8f55;
+            color: white;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.25s;
+        }
+        
+        .donate-btn:hover {
+            background: #236c44;
+        }
+        /* DROP-OFF LOCATIONS */
+        
+        .locations-box {
+            background: white;
+            padding: 25px;
+            margin-top: 35px;
+            border-radius: 20px;
+            box-shadow: 0 6px 22px rgba(0, 0, 0, 0.05);
+        }
+        
+        .locations-box h3 {
+            margin: 0 0 18px;
+            color: #2e8f55;
+        }
+        
+        .loc-item {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e7f2ea;
+        }
+        
+        .loc-item:last-child {
+            border-bottom: none;
+        }
+        
+        .loc-name {
+            font-weight: 600;
+            color: #2e8f55;
+        }
+        
+        .loc-address {
+            font-size: 13px;
+            color: #6f8f7b;
+        }
     </style>
 </head>
-<body>
-    <div class="content-wrapper">
-        <h1>Donate Food Items</h1>
-        
-        <h2>Most Needed Items</h2>
-        <ul class="item-list">
-            {% for item in items %}
-            <li>
-                <strong>{{ item[0] }}</strong> - {{ item[1] }} 
-                <span class="urgency-{{ item[2] }}"> (Urgency: {{ item[2] }})</span>
-            </li>
-            {% else %}
-            <li>No items listed right now. Please check back later!</li>
-            {% endfor %}
-        </ul>
 
-        <h2 style="margin-top: 40px;">Drop-Off Locations & Hours</h2>
-        <ul class="location-list">
-            {% for loc in locations %}
-            <li>
-                <strong>{{ loc[0] }}</strong><br>
-                Address: {{ loc[1] }}<br>
-                Hours: {{ loc[2] }}
-            </li>
-            {% endfor %}
-        </ul>
-        <div style="text-align: center; margin-top: 30px;">
-            <a href="{{ url_for('contribution') }}" class="btn secondary">Back to Choices</a>
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div class="logo">4 Elements</div>
+
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('projects') }}">Projects</a>
+            <a href="{{ url_for('about') }}">About</a>
+            <a href="{{ url_for('account') }}" class="back-btn">Back</a>
         </div>
     </div>
+
+    <div class="container">
+
+        <h2>Donate Food Items</h2>
+        <p class="subtitle">Choose an item to support your local food bank 🌿</p>
+
+        <!-- FOOD ITEMS -->
+        {% for item in items %}
+        <div class="item-card">
+
+            <div class="item-info">
+                <h3>{{ item[2] }}</h3>
+
+                {% if item[3] %}
+                <p>{{ item[3] }}</p>
+                {% endif %}
+
+                <span class="urgency-tag {{ item[5] }}">{{ item[5] }} Need</span>
+            </div>
+
+            <!-- LINK TO PROMISE PAGE -->
+            <a class="donate-btn" href="{{ url_for('promise_food', item_id=item[0]) }}">
+                Donate →
+            </a>
+
+        </div>
+        {% endfor %}
+
+        <!-- DROP OFF LOCATIONS -->
+        <div class="locations-box">
+            <h3>Drop-Off Locations</h3>
+
+            {% for loc in locations %}
+            <div class="loc-item">
+                <div class="loc-name">{{ loc[0] }}</div>
+                <div class="loc-address">{{ loc[1] }}</div>
+                <div class="loc-address"><strong>Hours:</strong> {{ loc[2] }}</div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
 </body>
+
 </html>

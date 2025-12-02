@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Choose How to Contribute</title>
@@ -8,24 +9,28 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
     <style>
         /* Main page layout */
+        
         body {
             background: #f7f7f7;
             display: flex;
-            flex-direction: column; /* Allow vertical stacking */
+            flex-direction: column;
+            /* Allow vertical stacking */
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             padding: 40px;
         }
+        
         .page-header {
             text-align: center;
             margin-bottom: 40px;
         }
+        
         .page-header h1 {
             color: var(--dark-green);
         }
-
         /* Container for the choice cards */
+        
         .contribution-container {
             display: flex;
             justify-content: center;
@@ -33,6 +38,7 @@
             gap: 40px;
             text-align: center;
         }
+        
         .choice-card {
             background: #fff;
             padding: 50px 40px;
@@ -41,20 +47,25 @@
             width: 300px;
             transition: all 0.3s ease;
         }
+        
         .choice-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
         }
+        
         .choice-card i {
             font-size: 3.5rem;
             color: var(--main-green);
             margin-bottom: 20px;
         }
+        
         .choice-card h2 {
             color: var(--dark-green);
             margin-bottom: 15px;
         }
-        .choice-card a { /* Primary 'Give' buttons */
+        
+        .choice-card a {
+            /* Primary 'Give' buttons */
             display: inline-block;
             margin-top: 20px;
             background: var(--main-green);
@@ -65,15 +76,18 @@
             font-weight: 600;
             transition: 0.3s ease;
         }
-         .choice-card a:hover {
+        
+        .choice-card a:hover {
             background: var(--dark-green);
-         }
-
+        }
         /* ✅ START: STYLES FOR THE NEW BACK BUTTON */
+        
         .back-button-container {
-            margin-top: 50px; /* Add space above the button */
+            margin-top: 50px;
+            /* Add space above the button */
             text-align: center;
         }
+        
         .btn {
             padding: 10px 28px;
             border-radius: 30px;
@@ -83,21 +97,23 @@
             transition: 0.3s ease;
             display: inline-block;
         }
+        
         .btn.secondary {
             background: transparent;
             border: 2px solid var(--dark-green);
             color: var(--dark-green);
             padding: 10px 33px;
         }
+        
         .btn.secondary:hover {
             background: var(--dark-green);
             color: #fff;
             transform: scale(1.05);
         }
         /* ✅ END: STYLES FOR THE NEW BACK BUTTON */
-
     </style>
 </head>
+
 <body>
     <div class="page-header">
         <h1>Choose Your Contribution</h1>
@@ -109,7 +125,7 @@
             <i class="fa-solid fa-hand-holding-dollar"></i>
             <h2>Donate Money</h2>
             <p>Your financial support helps us purchase essential supplies.</p>
-            <a href="{{ url_for('donate_money') }}">Give Financially</a>
+            <a href="{{ url_for('select_bank_money') }}">Share Kindness</a>
         </div>
         <div class="choice-card">
             <i class="fa-solid fa-box-open"></i>
@@ -129,4 +145,5 @@
     </div>
 
 </body>
+
 </html>

@@ -1,72 +1,167 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Donate Money</title>
-    <!-- Using the main stylesheet for consistent styling -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
-    <style>
-        /* Helper styles to center the form content */
-        body { background: #f7f7f7; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-        .form-wrapper { background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); width: 450px; text-align: center; }
-        .form-wrapper h1 { color: var(--dark-green); margin-bottom: 15px; }
-        .form-wrapper p { margin-bottom: 20px; }
-        .form-wrapper input, .form-wrapper select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #cfe7d5; background: #f9fdf9; font-family: "Open Sans", sans-serif; font-size: 1rem; }
-        
-        /* ✅ START: FIX FOR BUTTON SPACING */
-        .button-container {
-            display: flex;
-            flex-direction: column; /* Stack buttons vertically */
-            gap: 10px;             /* Add a 10px space between them */
-            margin-top: 15px;      /* Add space above the first button */
-        }
-        /* ✅ END: FIX FOR BUTTON SPACING */
+    <title>Donate Money | 4Elements</title>
 
-        /* Primary button styling (from style.css) */
-        .form-wrapper button {
+    <!-- Global stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
+
+    <style>
+        body {
+            background: #f4f8f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: "Poppins", sans-serif;
+        }
+        
+        .form-wrapper {
+            background: #ffffff;
+            padding: 40px 35px;
+            border-radius: 24px;
+            width: 460px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(22, 53, 35, 0.12);
+            animation: fadeUp 0.9s ease;
+        }
+        
+        @keyframes fadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            color: var(--dark-green);
+            font-size: 2rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 0.95rem;
+            color: #6c826d;
+            margin-bottom: 20px;
+        }
+        
+        .bank-name {
+            background: #e8f9ef;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            color: var(--dark-green);
+            font-weight: 600;
+        }
+        
+        input,
+        select {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid #d8e9dc;
+            font-size: 1rem;
+            margin-top: 12px;
+            background: #f9fdf9;
+            transition: 0.25s ease;
+        }
+        
+        input:focus,
+        select:focus {
+            border-color: var(--main-green);
+            box-shadow: 0 0 6px rgba(0, 140, 80, 0.15);
+            outline: none;
+        }
+        
+        .button-container {
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        
+        button {
+            padding: 13px;
+            width: 100%;
+            background: var(--main-green);
             border: none;
             border-radius: 30px;
-            background-color: var(--main-green);
-            color: #fff;
+            color: white;
+            font-size: 1.05rem;
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s;
-            font-size: 1rem;
+            transition: 0.3s;
         }
-        .form-wrapper button:hover {
-            background-color: var(--dark-green);
+        
+        button:hover {
+            background: var(--dark-green);
         }
-
-        /* Secondary button styling (using classes from style_index.css) */
-        .btn.secondary {
-            background: transparent;
+        
+        .btn-secondary {
+            padding: 12px;
+            width: 100%;
+            border-radius: 30px;
             border: 2px solid var(--dark-green);
+            background: transparent;
             color: var(--dark-green);
-            padding: 10px 28px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s;
         }
-        .btn.secondary:hover {
+        
+        .btn-secondary:hover {
             background: var(--dark-green);
             color: #fff;
         }
     </style>
 </head>
+
 <body>
+
     <div class="form-wrapper">
-        <form action="{{ url_for('donate_money') }}" method="POST">
-            <h1>Donate Money</h1>
-            <p>This is a placeholder form. No payment will be processed.</p>
-            <input type="number" name="amount" placeholder="Amount ($)" required>
+
+        <h1>Donate Money</h1>
+        <p class="subtitle">Your contribution makes real impact 💚</p>
+
+        <!-- Show selected bank -->
+        <div class="bank-name">
+            Donating to: {{ donor_name }} <br>
+            <span style="font-size:0.85rem; color:#555;">📍 {{ donor_address }}</span>
+        </div>
+
+        <!-- Donation form -->
+        <form action="{{ url_for('donate_money_bank', donor_id=donor_id) }}" method="POST">
+
+            <input type="hidden" name="donor_id" value="{{ donor_id }}">
+
+            <input type="number" name="amount" placeholder="Enter Amount (€)" step="0.01" required>
+
             <select name="frequency">
-                <option value="one-time">One-Time</option>
-                <option value="monthly">Monthly</option>
+                <option value="one-time">One-Time Donation</option>
+                <option value="monthly">Monthly Donation</option>
             </select>
+
             <div class="button-container">
-                <button type="submit">Proceed to Payment</button>
-                <a href="{{ url_for('contribution') }}" class="btn secondary">Back to Choices</a>
+                <button type="submit">Confirm Donation</button>
+
+                <a href="{{ url_for('select_bank_money') }}" class="btn-secondary">
+                    Back to Banks
+                </a>
             </div>
+
         </form>
     </div>
+
 </body>
+
 </html>

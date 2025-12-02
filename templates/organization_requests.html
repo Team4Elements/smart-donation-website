@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Volunteer Requests | 4Elements</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
+    <style>
+        body {
+            background: #f4faf6;
+            font-family: "Poppins", sans-serif;
+            padding: 30px;
+        }
+        
+        .table-container {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+            max-width: 1100px;
+            margin: auto;
+        }
+        
+        h2 {
+            font-size: 26px;
+            color: #2e8f55;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: #2e8f55;
+            color: white;
+            padding: 12px;
+        }
+        
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #e6f0ea;
+            font-size: 14px;
+        }
+        
+        .status {
+            font-weight: 600;
+            border-radius: 10px;
+            padding: 4px 10px;
+        }
+        
+        .pending {
+            background: #fff4cc;
+            color: #a57a00;
+        }
+        
+        .approved {
+            background: #d3f8d6;
+            color: #1e7a32;
+        }
+        
+        .rejected {
+            background: #ffd4d4;
+            color: #a83232;
+        }
+        
+        .btn {
+            padding: 6px 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .approve-btn {
+            background: #2e8f55;
+        }
+        
+        .reject-btn {
+            background: #d9534f;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="table-container">
+        <h2>Volunteer Requests</h2>
+
+        <table>
+            <tr>
+                <th>Task</th>
+                <th>People Needed</th>
+                <th>Date</th>
+                <th>Duration</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+
+            {% for req in requests %}
+            <tr>
+                <td>{{ req[1] }}</td>
+                <td>{{ req[2] }}</td>
+                <td>{{ req[3] }}</td>
+                <td>{{ req[4] }}</td>
+
+                <td>
+                    <span class="status {{ req[5] }}">{{ req[5].capitalize() }}</span>
+                </td>
+
+                <td>
+                    {% if req[5] == 'pending' %}
+                    <a class="btn approve-btn" href="{{ url_for('approve_request', req_id=req[0]) }}">Approve</a>
+                    <a class="btn reject-btn" href="{{ url_for('reject_request', req_id=req[0]) }}">Reject</a> {% else %} --- {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <div style="text-align:center; margin-top:25px;">
+            <a href="{{ url_for('account_donor') }}" style="text-decoration:none; color:#2e8f55; font-weight:600;">
+                ← Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+</body>
+
+</html>

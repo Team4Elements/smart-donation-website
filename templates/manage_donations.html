@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Donations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_index.css') }}">
+    <style>
+        body {
+            font-family: Poppins, sans-serif;
+            background: #f4faf6;
+            padding: 40px;
+        }
+        
+        table {
+            width: 100%;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, .05);
+        }
+        
+        th,
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background: #2e8f55;
+            color: white;
+            text-align: left;
+        }
+        
+        .btn {
+            padding: 8px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .accept {
+            background: #2e8f55;
+            color: white;
+        }
+        
+        .reject {
+            background: #ff6b6b;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Received Donations</h2>
+
+    <table>
+        <tr>
+            <th>Donor</th>
+            <th>Type</th>
+            <th>Details</th>
+            <th>Date</th>
+            <th>Action</th>
+        </tr>
+
+        {% for d in donations %}
+        <tr>
+            <td>{{ d[0] }}</td>
+            <td>{{ d[1] }}</td>
+
+            <td>
+                {% if d[1] == "money" %} €{{ d[2] }} {% elif d[1] == "food" %} {{ d[3] }} items {% else %} {{ d[4] }} hours {% endif %}
+            </td>
+
+            <td>{{ d[5] }}</td>
+
+            <td>
+                <a href="/approve/{{ loop.index }}" class="btn accept">Accept</a>
+                <a href="/reject/{{ loop.index }}" class="btn reject">Reject</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</body>
+
+</html>
