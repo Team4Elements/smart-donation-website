@@ -13,8 +13,7 @@ from flask_limiter.util import get_remote_address
 # 🔑 HELPER FUNCTIONS
 # ===============================
 def hash_password(password):
-    return generate_password_hash(password)  # PBKDF2 + SHA256 by default
-
+    return generate_password_hash(password)  
 def verify_password(hashed, password):
     return check_password_hash(hashed, password)
 
@@ -27,7 +26,7 @@ app.config.update(
     SESSION_COOKIE_SECURE=True,   #Cookie is only sent over HTTPS, not plain HTTP
     SESSION_COOKIE_SAMESITE='Lax' #Browsers block cookies from being sent in most cross-site requests
 )
-app.secret_key = "super_secret_key_here" # can be changed to "secrets.token_hex(32)" after hosting
+app.secret_key = 
 
 # ==============================================================
 # 📧 EMAIL CONFIGURATION
